@@ -229,9 +229,9 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--gray900);fo
 </head>
 <body>
 <div class="platform-switcher">
+  <div class="plat-tab" onclick="switchPlatform('combined',this)">📊 Overview Gabungan</div>
   <div class="plat-tab active tt" onclick="switchPlatform('tiktok',this)">🎵 TikTok Shop</div>
   <div class="plat-tab sh" onclick="switchPlatform('shopee',this)">🛍️ Shopee</div>
-  <div class="plat-tab" onclick="switchPlatform('combined',this)">📊 Overview Gabungan</div>
 </div>
 <div id="platform-tiktok" class="platform-page active">
 <div class="shell">
@@ -441,7 +441,16 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--gray900);fo
   <div class="sb-foot"><div class="sb-note">Sumber: Shopee Affiliate Portal<br>Folder: Infarm KOL Data _ Shopee<br>Update: 25 Juli 2026</div></div>
 </aside>
 <main class="main">
-  <div class="topbar"><div><div class="tb-title">Overview — Shopee Affiliate</div><div class="tb-meta">Juli W3 (15–21 Jul) · Baru 1 periode, trend historis menyusul</div></div></div>
+  <div class="topbar">
+    <div><div class="tb-title">Overview — Shopee Affiliate</div><div class="tb-meta">Baru 1 periode, trend historis menyusul</div></div>
+    <div class="tb-right">
+      <div class="mode-dropdown-wrap">
+        <select class="period-sel" id="shPeriodSel" disabled title="Baru ada data Juli W3. Opsi lain nyusul setelah W1/W2 Shopee diproses.">
+          <option>Juli W3 (15–21 Jul)</option>
+        </select>
+      </div>
+    </div>
+  </div>
   <div class="page active content">
     <div class="hero" id="sh-hero"></div>
     <div class="card-grid cg-4 sec" id="sh-flags"></div>
@@ -469,7 +478,16 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--gray900);fo
 
 <div id="platform-combined" class="platform-page">
   <main class="main" style="width:100%">
-    <div class="topbar"><div><div class="tb-title">📊 Overview Gabungan — TikTok + Shopee</div><div class="tb-meta" id="combined-period-label">Major metrics saja, bukan detail</div></div></div>
+    <div class="topbar">
+      <div><div class="tb-title">📊 Overview Gabungan — TikTok + Shopee</div><div class="tb-meta" id="combined-period-label">Major metrics saja, bukan detail</div></div>
+      <div class="tb-right">
+        <div class="mode-dropdown-wrap">
+          <select class="period-sel" id="combinedPeriodSel" disabled title="Overview Gabungan cuma bisa nampilin periode yang datanya ada di KEDUA platform. Saat ini cuma Juli W3.">
+            <option>Juli W3 (15–21 Jul) — satu-satunya periode overlap</option>
+          </select>
+        </div>
+      </div>
+    </div>
     <div class="page active content">
       <div class="combined-hero" id="combined-hero"></div>
       <div class="panel" style="margin-bottom:16px">
@@ -494,16 +512,39 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--gray900);fo
 let D;
 let SHD;
 async function loadDataAndInit(){
-  const [ttRes, shRes] = await Promise.all([fetch('data.json'), fetch('data_shopee.json')]);
-  D = await ttRes.json();
-  SHD = await shRes.json();
-  hydrate();
-  populatePeriodDropdown();
-  document.getElementById('modeSel').value=PM;
-  renderAll();
-  showPage('overview');
-  renderShopeeOverview();
-  renderCombined();
+  try {
+    const ttRes = await fetch('data.json');
+    if(!ttRes.ok) throw new Error('HTTP '+ttRes.status);
+    D = await ttRes.json();
+    hydrate();
+    populatePeriodDropdown();
+    document.getElementById('modeSel').value=PM;
+    renderAll();
+    showPage('overview');
+  } catch(e) {
+    console.error('TikTok data load failed:', e);
+    const el = document.getElementById('hero-strip');
+    if(el) el.innerHTML = '<div style="padding:20px;color:#ff7d85;font-size:13px">⚠️ Gagal memuat data TikTok: '+e.message+'. Coba refresh, atau hubungi admin kalau berlanjut.</div>';
+  }
+
+  try {
+    const shRes = await fetch('data_shopee.json');
+    if(!shRes.ok) throw new Error('HTTP '+shRes.status);
+    SHD = await shRes.json();
+    renderShopeeOverview();
+  } catch(e) {
+    console.error('Shopee data load failed:', e);
+    const el = document.getElementById('sh-hero');
+    if(el) el.innerHTML = '<div style="padding:20px;color:#ff7d85;font-size:13px">⚠️ Gagal memuat data Shopee: '+e.message+'. Coba refresh, atau hubungi admin kalau berlanjut.</div>';
+  }
+
+  try {
+    renderCombined();
+  } catch(e) {
+    console.error('Combined render failed:', e);
+    const el = document.getElementById('combined-hero');
+    if(el) el.innerHTML = '<div style="padding:20px;color:#ff7d85;font-size:13px">⚠️ Gagal render Overview Gabungan: '+e.message+'</div>';
+  }
 }
 function hydrate(){
   const F=D._schema.creator_fields, CF=D._schema.cmp_fields;
@@ -992,7 +1033,11 @@ function sortSH(key){ if(shSortKey===key) shSortDir*=-1; else {shSortKey=key; sh
 
 // ===== COMBINED OVERVIEW =====
 function renderCombined(){
-  if(!D || !SHD) return;
+  if(!D || !SHD) {
+    const el = document.getElementById('combined-hero');
+    if(el) el.innerHTML = '<div style="padding:20px;color:rgba(255,255,255,.6);font-size:13px">⏳ Menunggu data TikTok & Shopee selesai dimuat...</div>';
+    return;
+  }
   const ttOv = D.jul_w3.overview;
   const shOv = SHD.jul_w3.overview;
   const combinedGmv = ttOv.total_gmv + shOv.total_gmv;
