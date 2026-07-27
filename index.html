@@ -208,9 +208,32 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--gray900);fo
 .ib-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:2px}
 .delta-chip{font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;display:inline-flex;align-items:center;gap:2px}
 
+.platform-switcher{display:flex;gap:8px;padding:16px 24px 0;background:#e8ebe8}
+.plat-tab{padding:10px 20px;border-radius:10px 10px 0 0;font-size:13px;font-weight:700;cursor:pointer;background:var(--gray100);color:var(--gray500);border:1px solid var(--gray200);border-bottom:none}
+.plat-tab.active{background:#fff;color:var(--g700)}
+.plat-tab.active.tt{color:#000}
+.plat-tab.active.sh{color:#EE4D2D}
+.platform-page{display:none}
+.platform-page.active{display:contents}
+#platform-combined.active{display:block}
+.combined-hero{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px}
+.ch-hero{background:linear-gradient(135deg,#0d2b1a,#1a3d28);border-radius:var(--r-lg);padding:20px;color:#fff}
+.ch-hero-label{font-size:11px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.04em}
+.ch-hero-val{font-size:26px;font-weight:800;margin-top:6px}
+.ch-hero-sub{font-size:11px;color:rgba(255,255,255,.5);margin-top:4px}
+.combined-split-bar{display:flex;height:28px;border-radius:6px;overflow:hidden;margin:10px 0}
+.sh-ch-badge{font-size:9px;background:var(--gray100);padding:2px 6px;border-radius:999px;margin-right:3px}
+.sh-network-flag{color:#b45309;font-size:9px;font-weight:700}
+
 </style>
 </head>
 <body>
+<div class="platform-switcher">
+  <div class="plat-tab active tt" onclick="switchPlatform('tiktok',this)">🎵 TikTok Shop</div>
+  <div class="plat-tab sh" onclick="switchPlatform('shopee',this)">🛍️ Shopee</div>
+  <div class="plat-tab" onclick="switchPlatform('combined',this)">📊 Overview Gabungan</div>
+</div>
+<div id="platform-tiktok" class="platform-page active">
 <div class="shell">
 <aside class="sb">
   <div class="sb-logo"><div class="sb-brand">🌿 Infarm</div><div class="sb-sub">Affiliate Dashboard</div></div>
@@ -405,16 +428,82 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--gray900);fo
   </div>
 </main>
 </div>
+</div>
+
+<div id="platform-shopee" class="platform-page">
+<div class="shell">
+<aside class="sb">
+  <div class="sb-logo"><div class="sb-brand">🛍️ Infarm</div><div class="sb-sub">Shopee Affiliate Dashboard</div></div>
+  <nav class="sb-nav">
+    <div class="sb-grp">Dashboard</div>
+    <button class="nav-btn active"><span class="nav-ic">📊</span>Overview</button>
+  </nav>
+  <div class="sb-foot"><div class="sb-note">Sumber: Shopee Affiliate Portal<br>Folder: Infarm KOL Data _ Shopee<br>Update: 25 Juli 2026</div></div>
+</aside>
+<main class="main">
+  <div class="topbar"><div><div class="tb-title">Overview — Shopee Affiliate</div><div class="tb-meta">Juli W3 (15–21 Jul) · Baru 1 periode, trend historis menyusul</div></div></div>
+  <div class="page active content">
+    <div class="hero" id="sh-hero"></div>
+    <div class="card-grid cg-4 sec" id="sh-flags"></div>
+    <div class="panel-row pr-32">
+      <div class="panel">
+        <div class="panel-title">🏅 Top Creator <span class="ptag">Semua <span id="sh-creator-count"></span> creator · klik header buat sort</span></div>
+        <table class="dt"><thead><tr>
+          <th class="sortable" onclick="sortSH('nickname')">Creator <span class="sort-ic" id="sh-ic-nickname">↕</span></th>
+          <th>Tier</th>
+          <th class="r sortable" onclick="sortSH('gmv')">GMV <span class="sort-ic" id="sh-ic-gmv">↕</span></th>
+          <th class="r sortable" onclick="sortSH('orders')">Orders <span class="sort-ic" id="sh-ic-orders">↕</span></th>
+          <th class="r sortable" onclick="sortSH('aov')">AOV <span class="sort-ic" id="sh-ic-aov">↕</span></th>
+          <th class="r sortable" onclick="sortSH('n_channels')"># Channel <span class="sort-ic" id="sh-ic-n_channels">↕</span></th>
+        </tr></thead><tbody id="sh-tbody"></tbody></table>
+      </div>
+      <div class="panel">
+        <div class="panel-title">🍩 Distribusi Tier <span class="ptag">Shopee-specific</span></div>
+        <div id="sh-donut"></div>
+      </div>
+    </div>
+  </div>
+</main>
+</div>
+</div>
+
+<div id="platform-combined" class="platform-page">
+  <main class="main" style="width:100%">
+    <div class="topbar"><div><div class="tb-title">📊 Overview Gabungan — TikTok + Shopee</div><div class="tb-meta" id="combined-period-label">Major metrics saja, bukan detail</div></div></div>
+    <div class="page active content">
+      <div class="combined-hero" id="combined-hero"></div>
+      <div class="panel" style="margin-bottom:16px">
+        <div class="panel-title">📐 Kontribusi GMV per Platform</div>
+        <div id="combined-split"></div>
+      </div>
+      <div class="panel-row pr-2">
+        <div class="panel">
+          <div class="panel-title">👥 Active Creators <span class="ptag">TIDAK dijumlah</span></div>
+          <div id="combined-creators"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">⚠️ Data Quality Notes</div>
+          <div id="combined-notes"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
 <script>
 let D;
+let SHD;
 async function loadDataAndInit(){
-  const res = await fetch('data.json');
-  D = await res.json();
+  const [ttRes, shRes] = await Promise.all([fetch('data.json'), fetch('data_shopee.json')]);
+  D = await ttRes.json();
+  SHD = await shRes.json();
   hydrate();
   populatePeriodDropdown();
   document.getElementById('modeSel').value=PM;
   renderAll();
   showPage('overview');
+  renderShopeeOverview();
+  renderCombined();
 }
 function hydrate(){
   const F=D._schema.creator_fields, CF=D._schema.cmp_fields;
@@ -816,6 +905,141 @@ function renderAlerts(){
   ].map(a=>`<div class="alert ${a.cls}"><div><strong>${a.title}</strong><br>${a.body}</div></div>`).join('');
 
   document.getElementById('alert-count').textContent='3';
+}
+
+// ===== PLATFORM SWITCHER =====
+function switchPlatform(p, el){
+  document.querySelectorAll('.plat-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('platform-tiktok').classList.toggle('active', p==='tiktok');
+  document.getElementById('platform-shopee').classList.toggle('active', p==='shopee');
+  document.getElementById('platform-combined').classList.toggle('active', p==='combined');
+}
+
+// ===== SHOPEE OVERVIEW =====
+const SH_CH_ICON={'Facebook':'📘','Instagram':'📷','Shopee Video':'📹','Shopee Live':'🔴','TikTok':'🎵','YouTube':'▶️','Twitter':'🐦','Others':'❓'};
+let shSortKey='gmv', shSortDir=-1;
+
+function shCreatorObjects(){
+  const F = SHD._schema.creator_fields;
+  return SHD.jul_w3.creators.map(arr=>{
+    const o={}; F.forEach((k,i)=>o[k]=arr[i]);
+    o.nickname = o.nickname || o.username;
+    o.aov = o.orders>0 ? Math.round(o.gmv/o.orders) : 0;
+    o.n_channels = o.channels.length;
+    return o;
+  });
+}
+
+function renderShopeeOverview(){
+  if(!SHD) return;
+  const ov = SHD.jul_w3.overview;
+  const T = SHD.jul_w3.tiers;
+  const othersGmv = ov.others_gmv || 0;
+
+  document.getElementById('sh-hero').innerHTML = `
+    <div class="hero-kpi"><div class="hk-label">GMV Total</div><div class="hk-val big">${R(ov.total_gmv)}</div><div class="hk-sub">7 hari</div></div>
+    <div class="hero-sep"></div>
+    <div class="hero-kpi"><div class="hk-label">Total Orders</div><div class="hk-val">${N(ov.total_orders)}</div><div class="hk-sub">transaksi</div></div>
+    <div class="hero-sep"></div>
+    <div class="hero-kpi"><div class="hk-label">Avg AOV</div><div class="hk-val">${R(ov.aov)}</div><div class="hk-sub">per transaksi</div></div>
+    <div class="hero-sep"></div>
+    <div class="hero-kpi"><div class="hk-label">Active Creators</div><div class="hk-val">${N(ov.active_creators)}</div><div class="hk-sub">creator dengan GMV>0</div></div>
+    <div class="hero-sep"></div>
+    <div class="hero-kpi"><div class="hk-label">Total Commission</div><div class="hk-val">${R(ov.total_commission)}</div><div class="hk-sub">${ov.avg_comm_pct}% dari GMV</div></div>
+  `;
+
+  document.getElementById('sh-flags').innerHTML = `
+    <div class="mc amber"><div class="mc-label">Others (Traffic Tak Teridentifikasi)</div><div class="mc-val">${ov.others_pct}%</div><div class="mc-sub">dari total GMV — min. teridentifikasi, bukan pasti bersih</div></div>
+    <div class="mc red"><div class="mc-label">⚠️ Akun Jaringan Terdeteksi</div><div class="mc-val">${SHD.jul_w3.network_count}</div><div class="mc-sub">Shopee Media Network, ShopBack, dll — disajikan apa adanya</div></div>
+    <div class="mc blue"><div class="mc-label">Channel Terdeteksi</div><div class="mc-val">7</div><div class="mc-sub">FB, IG, Shopee Video/Live, TikTok, YT, Twitter</div></div>
+    <div class="mc"><div class="mc-label">Active Creators</div><div class="mc-val">${N(ov.active_creators)}</div><div class="mc-sub">total creator GMV>0 minggu ini</div></div>
+  `;
+
+  const ts=['T1','T2','T3','T0'];
+  let off=28, paths='';
+  ts.forEach(t=>{const dash=T[t].gmv_pct/100*263.9;const gap=263.9-dash;paths+=`<circle cx="55" cy="55" r="42" fill="none" stroke="${TC[t]}" stroke-width="16" stroke-dasharray="${dash.toFixed(1)} ${gap.toFixed(1)}" stroke-dashoffset="${-off+28}" transform="rotate(-90 55 55)"/>`;off+=dash;});
+  const legend = ts.map(t=>`<div class="leg-row"><div class="leg-dot" style="background:${TC[t]}"></div><div class="leg-lbl">${t} ${TL[t]} (${T[t].count})</div><div class="leg-val">${R(T[t].gmv)}</div><div class="leg-pct">${T[t].gmv_pct}%</div></div>`).join('');
+  document.getElementById('sh-donut').innerHTML = `<div class="donut-wrap"><svg width="110" height="110" viewBox="0 0 110 110"><circle cx="55" cy="55" r="42" fill="none" stroke="#e5e7eb" stroke-width="16"/>${paths}<text x="55" y="49" text-anchor="middle" font-size="13" font-weight="700" fill="#111827">${T.T1.count}</text><text x="55" y="62" text-anchor="middle" font-size="9" fill="#6b7280">T1</text></svg><div class="donut-leg">${legend}</div></div>`;
+
+  document.getElementById('sh-creator-count').textContent = ov.active_creators;
+  renderSHTable();
+}
+
+function renderSHTable(){
+  const data = shCreatorObjects();
+  data.sort((a,b)=>{
+    const av=a[shSortKey], bv=b[shSortKey];
+    if(typeof av==='string') return shSortDir*av.localeCompare(bv);
+    return shSortDir*(bv-av);
+  });
+  document.querySelectorAll('#platform-shopee .sort-ic').forEach(el=>el.classList.remove('active'));
+  const ic=document.getElementById('sh-ic-'+shSortKey); if(ic){ic.classList.add('active');ic.textContent=shSortDir===1?'↑':'↓';}
+  document.getElementById('sh-tbody').innerHTML = data.map(c=>{
+    const chBadges = c.channels.map(ch=>`<span class="sh-ch-badge">${SH_CH_ICON[ch]||'❓'} ${ch}</span>`).join('');
+    const flag = c.is_network ? ' <span class="sh-network-flag">⚠️ akun jaringan</span>' : '';
+    return `<tr>
+      <td><div class="cc"><div class="av" style="background:${TB[c.tier]};color:${TC[c.tier]}">${ini(c.nickname)}</div><div><div class="cc-name">${c.nickname}${flag}</div><div class="cc-sub">${chBadges}</div></div></div></td>
+      <td><span class="badge ${c.tier.toLowerCase()}">${c.tier}</span></td>
+      <td class="r"><strong>${R(c.gmv)}</strong></td>
+      <td class="r">${c.orders}</td>
+      <td class="r">${R(c.aov)}</td>
+      <td class="r">${c.n_channels}</td>
+    </tr>`;
+  }).join('') || `<tr><td colspan="6" class="empty">Tidak ada data</td></tr>`;
+}
+function sortSH(key){ if(shSortKey===key) shSortDir*=-1; else {shSortKey=key; shSortDir = key==='nickname'?1:-1;} renderSHTable(); }
+
+// ===== COMBINED OVERVIEW =====
+function renderCombined(){
+  if(!D || !SHD) return;
+  const ttOv = D.jul_w3.overview;
+  const shOv = SHD.jul_w3.overview;
+  const combinedGmv = ttOv.total_gmv + shOv.total_gmv;
+  const combinedOrders = ttOv.total_orders + shOv.total_orders;
+  const combinedComm = ttOv.commission + shOv.total_commission;
+  const ttShare = ttOv.total_gmv/combinedGmv*100;
+  const shShare = shOv.total_gmv/combinedGmv*100;
+
+  document.getElementById('combined-period-label').textContent = 'Juli W3 (15–21 Jul) · Major metrics saja, bukan detail';
+
+  document.getElementById('combined-hero').innerHTML = `
+    <div class="ch-hero"><div class="ch-hero-label">GMV Gabungan</div><div class="ch-hero-val">${R(combinedGmv)}</div><div class="ch-hero-sub">TikTok + Shopee, additive</div></div>
+    <div class="ch-hero"><div class="ch-hero-label">Orders Gabungan</div><div class="ch-hero-val">${N(combinedOrders)}</div><div class="ch-hero-sub">TikTok + Shopee, additive</div></div>
+    <div class="ch-hero"><div class="ch-hero-label">Commission Gabungan</div><div class="ch-hero-val">${R(combinedComm)}</div><div class="ch-hero-sub">TikTok + Shopee, additive</div></div>
+  `;
+
+  document.getElementById('combined-split').innerHTML = `
+    <div class="combined-split-bar">
+      <div style="width:${ttShare.toFixed(1)}%;background:#000;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700">TikTok ${ttShare.toFixed(0)}%</div>
+      <div style="width:${shShare.toFixed(1)}%;background:#EE4D2D;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700">Shopee ${shShare.toFixed(0)}%</div>
+    </div>
+    <div style="font-size:11px;color:var(--gray500)">TikTok: ${R(ttOv.total_gmv)} · Shopee: ${R(shOv.total_gmv)}</div>
+  `;
+
+  document.getElementById('combined-creators').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div style="background:var(--gray50);border-radius:8px;padding:14px;text-align:center">
+        <div style="font-size:24px;font-weight:800">${ttOv.active_creators}</div>
+        <div style="font-size:11px;color:var(--gray500)">TikTok creators</div>
+      </div>
+      <div style="background:var(--gray50);border-radius:8px;padding:14px;text-align:center">
+        <div style="font-size:24px;font-weight:800">${shOv.active_creators}</div>
+        <div style="font-size:11px;color:var(--gray500)">Shopee creators</div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--gray500);margin-top:10px;line-height:1.6">
+      Sengaja dipisah, bukan dijumlah jadi ${ttOv.active_creators+shOv.active_creators}. Kita nggak punya cara reliable buat match creator yang sama lintas platform (username beda sistem) — kalau dijumlah, ada risiko double-count creator yang aktif di kedua platform.
+    </div>
+  `;
+
+  document.getElementById('combined-notes').innerHTML = `
+    <div style="font-size:12px;line-height:1.8">
+      <div style="margin-bottom:10px"><strong>Shopee — ${shOv.others_pct}% GMV</strong> dari traffic "Others" (sumber tak teridentifikasi)</div>
+      <div style="margin-bottom:10px"><strong>Shopee — ${SHD.jul_w3.network_count} akun jaringan</strong> terdeteksi (Shopee Media Network, ShopBack, dll) — bukan KOL individual</div>
+      <div style="color:var(--gray500);font-size:11px">Kedua catatan ini nggak dibersihkan dari angka GMV Gabungan di atas — disajikan apa adanya sesuai kesepakatan kita.</div>
+    </div>
+  `;
 }
 
 // ===== INIT =====
