@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infarm — Overview Gabungan</title>
+<style>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infarm — Affiliate Dashboard</title>
+<style>
+
+
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g900:#0d2b1a;--g800:#1a3d28;--g700:#2D6A4F;--g600:#3a8a64;--g500:#52b788;--g400:#74c69d;--g200:#b7e4c7;--g100:#d8f3dc;
+  --amber:#f4a425;--amber-bg:#fef3cd;--red:#e63946;--red-bg:#fde8ea;--blue:#3a7bd5;--blue-bg:#ddeeff;--purple:#7c3aed;--purple-bg:#ede9fe;
+  --gray900:#111827;--gray800:#1f2937;--gray700:#374151;--gray600:#4b5563;--gray500:#6b7280;--gray400:#9ca3af;--gray300:#d1d5db;--gray200:#e5e7eb;--gray100:#f3f4f6;--gray50:#f9fafb;
+  --bg:#f4f6f4;--surface:#fff;--r-sm:6px;--r-md:10px;--r-lg:14px;
+  --sh:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --sh-md:0 4px 14px rgba(0,0,0,.08);
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--gray900);font-size:14px;line-height:1.5}
+.shell{display:flex;min-height:100vh}
+
+/* SIDEBAR */
+.sb{width:224px;background:var(--g900);flex-shrink:0;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sb-logo{padding:20px;border-bottom:1px solid rgba(255,255,255,.08)}
+.sb-brand{font-size:17px;font-weight:700;color:#fff;letter-spacing:-.3px}
+.sb-sub{font-size:11px;color:var(--g400);margin-top:2px}
+.sb-nav{padding:14px 10px;flex:1}
+.sb-grp{font-size:10px;font-weight:700;color:rgba(255,255,255,.28);letter-spacing:.08em;text-transform:uppercase;padding:0 8px;margin:14px 0 5px}
+.nav-btn{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--r-sm);color:rgba(255,255,255,.52);font-size:13px;cursor:pointer;transition:all .15s;margin-bottom:2px;user-select:none;border:none;background:none;width:100%;font-family:inherit;text-align:left}
+.nav-btn:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav-btn.active{background:var(--g700);color:#fff;font-weight:500}
+.nav-ic{font-size:14px;width:18px;text-align:center;flex-shrink:0}
+.sb-foot{padding:14px 16px;border-top:1px solid rgba(255,255,255,.07)}
+.sb-sel{width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:var(--r-sm);color:#fff;font-size:12px;padding:7px 10px;cursor:pointer;appearance:none;font-family:inherit}
+.sb-note{font-size:10px;color:rgba(255,255,255,.22);margin-top:10px;line-height:1.6}
+
+/* MAIN */
+.main{flex:1;overflow-y:auto;min-width:0}
+.topbar{background:var(--surface);border-bottom:1px solid var(--gray200);padding:13px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:20;box-shadow:var(--sh)}
+.tb-title{font-size:15px;font-weight:600;color:var(--gray900)}
+.tb-meta{font-size:11px;color:var(--gray500);margin-top:1px}
+.tb-right{display:flex;align-items:center;gap:10px}
+.toggle-wrap{display:flex;background:var(--gray100);border-radius:var(--r-sm);padding:3px;gap:2px}
+.tog-btn{padding:5px 16px;border-radius:4px;font-size:12px;font-weight:500;cursor:pointer;color:var(--gray600);transition:all .15s;border:none;background:none;font-family:inherit}
+.tog-btn.active{background:var(--surface);color:var(--gray900);box-shadow:0 1px 4px rgba(0,0,0,.1);font-weight:600}
+.btn{padding:7px 14px;border-radius:var(--r-sm);font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--gray300);background:transparent;color:var(--gray700);font-family:inherit;transition:all .15s}
+.btn:hover{background:var(--gray100)}
+
+.content{padding:24px 28px}
+.page{display:none}.page.active{display:block}
+.sec{margin-bottom:20px}
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sec-title{font-size:11px;font-weight:700;color:var(--gray500);text-transform:uppercase;letter-spacing:.06em}
+.sec-action{font-size:12px;color:var(--g700);cursor:pointer}.sec-action:hover{text-decoration:underline}
+
+/* HERO STRIP — 5 primary KPIs */
+.hero{display:grid;grid-template-columns:1.4fr .5px 1fr .5px 1fr .5px 1fr .5px 1fr;margin-bottom:22px;background:var(--g900);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-md)}
+.hero-sep{background:rgba(255,255,255,.1)}
+.hero-kpi{padding:18px 20px}
+.hk-label{font-size:10px;font-weight:700;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.hk-val{font-size:24px;font-weight:700;color:#fff;letter-spacing:-.5px;line-height:1}
+.hk-val.big{font-size:28px}
+.hk-sub{font-size:11px;color:rgba(255,255,255,.38);margin-top:4px}
+.hk-delta{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;margin-top:7px}
+.hd-up{background:rgba(82,183,136,.18);color:#74c69d}
+.hd-down{background:rgba(230,57,70,.18);color:#ff7d85}
+.hd-flat{background:rgba(255,255,255,.08);color:rgba(255,255,255,.38)}
+.hk-perday{font-size:13px;font-weight:600;color:var(--g400);margin-top:3px}
+
+/* SECONDARY METRIC CARDS */
+.card-grid{display:grid;gap:12px;margin-bottom:20px}
+.cg-4{grid-template-columns:repeat(4,1fr)}
+.cg-5{grid-template-columns:repeat(5,1fr)}
+.mc{background:var(--surface);border-radius:var(--r-lg);padding:14px 16px;box-shadow:var(--sh);border:1px solid var(--gray200);position:relative;overflow:hidden}
+.mc::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--g500)}
+.mc.red::after{background:var(--red)}.mc.amber::after{background:var(--amber)}
+.mc.blue::after{background:var(--blue)}.mc.purple::after{background:var(--purple)}
+.mc-label{font-size:10px;font-weight:700;color:var(--gray500);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+.mc-val{font-size:19px;font-weight:700;color:var(--gray900);letter-spacing:-.3px;line-height:1}
+.mc-sub{font-size:11px;color:var(--gray500);margin-top:4px}
+.mc-delta{display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:2px 7px;border-radius:999px;margin-top:7px}
+.mcd-up{background:var(--g100);color:var(--g700)}.mcd-down{background:var(--red-bg);color:var(--red)}.mcd-flat{background:var(--gray100);color:var(--gray500)}
+
+/* PANEL */
+.panel-row{display:grid;gap:16px;margin-bottom:20px}
+.pr-2{grid-template-columns:1fr 1fr}.pr-32{grid-template-columns:3fr 2fr}.pr-23{grid-template-columns:2fr 3fr}
+.panel{background:var(--surface);border-radius:var(--r-lg);padding:18px 20px;box-shadow:var(--sh);border:1px solid var(--gray200)}
+.panel-title{font-size:13px;font-weight:600;color:var(--gray800);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.ptag{font-size:10px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--gray100);color:var(--gray600)}
+
+/* TABLE */
+.dt{width:100%;border-collapse:collapse}
+.dt th{font-size:10px;font-weight:700;color:var(--gray500);text-transform:uppercase;letter-spacing:.04em;padding:0 8px 9px 0;text-align:left;border-bottom:1px solid var(--gray200);white-space:nowrap;cursor:pointer;user-select:none}
+.dt th.r{text-align:right;padding-right:0}.dt th:hover{color:var(--gray900)}
+.dt td{padding:9px 8px 9px 0;font-size:12px;color:var(--gray800);border-bottom:1px solid var(--gray100);vertical-align:middle}
+.dt td.r{text-align:right;padding-right:0}
+.dt tr:last-child td{border-bottom:none}
+.dt tbody tr:hover td{background:var(--gray50)}
+.cc{display:flex;align-items:center;gap:8px}
+.av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.cc-name{font-weight:500;font-size:12px;color:var(--gray900)}
+.cc-sub{font-size:10px;color:var(--gray400)}
+
+/* BADGES */
+.badge{display:inline-flex;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;white-space:nowrap}
+.t1{background:#d8f3dc;color:#1a5c36}.t2{background:#ddeeff;color:#1a4a8a}
+.t3{background:#fef3cd;color:#7a4a0a}.t0{background:var(--gray200);color:var(--gray600)}
+.move-up{background:var(--g100);color:var(--g700);font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px}
+.move-dn{background:var(--red-bg);color:var(--red);font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px}
+.move-eq{color:var(--gray400);font-size:11px}
+
+/* BAR */
+.bar-list{display:flex;flex-direction:column;gap:10px}
+.bar-row{display:flex;flex-direction:column;gap:4px}
+.bar-meta{display:flex;justify-content:space-between;font-size:12px}
+.bar-lbl{color:var(--gray700);font-weight:500}.bar-val{color:var(--gray500);font-size:11px}
+.bar-track{height:7px;background:var(--gray100);border-radius:999px;overflow:hidden}
+.bar-fill{height:100%;border-radius:999px}
+
+/* DONUT */
+.donut-wrap{display:flex;align-items:center;gap:18px;margin-bottom:14px}
+.donut-leg{flex:1;display:flex;flex-direction:column;gap:8px}
+.leg-row{display:flex;align-items:center;gap:8px;font-size:12px}
+.leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.leg-lbl{color:var(--gray700);flex:1}.leg-val{font-weight:600;color:var(--gray900)}
+.leg-pct{font-size:11px;color:var(--gray500);min-width:32px;text-align:right}
+
+/* TIER MINI */
+.tier-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.tier-card{border-radius:var(--r-lg);border:1px solid var(--gray200);overflow:hidden;background:var(--surface);box-shadow:var(--sh)}
+.tc-head{padding:10px 14px;display:flex;align-items:center;justify-content:space-between}
+.tc-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.tc-body{padding:12px 14px}
+.tc-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:.5px solid var(--gray100)}.tc-row:last-child{border-bottom:none}
+.tc-key{color:var(--gray500)}.tc-val{font-weight:600;color:var(--gray800)}
+
+/* SCORE */
+.score{display:flex;gap:2px}
+.sd{width:8px;height:8px;border-radius:2px}.sd-on{background:var(--g500)}.sd-off{background:var(--gray200)}
+
+/* REFUND COLOR */
+.r-ok{color:var(--g700);font-weight:600}.r-warn{color:var(--amber);font-weight:600}.r-bad{color:var(--red);font-weight:600}
+
+/* ALERT */
+.alert{display:flex;gap:10px;padding:12px 14px;border-radius:var(--r-md);margin-bottom:10px;font-size:12px;line-height:1.6}
+.al-r{background:var(--red-bg);border-left:3px solid var(--red);color:#7f1d1d}
+.al-a{background:var(--amber-bg);border-left:3px solid var(--amber);color:#78350f}
+.al-g{background:var(--g100);border-left:3px solid var(--g500);color:#14532d}
+.al-b{background:var(--blue-bg);border-left:3px solid var(--blue);color:#1e3a5f}
+
+/* FILTER TABS */
+.ftabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.ftab{padding:5px 12px;border-radius:999px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--gray200);color:var(--gray600);background:var(--surface);transition:all .15s;user-select:none}
+.ftab:hover:not(.active){background:var(--gray100)}.ftab.active{background:var(--g700);color:#fff;border-color:var(--g700)}
+
+.divider{height:1px;background:var(--gray200);margin:16px 0}
+.empty{text-align:center;padding:24px;color:var(--gray400);font-size:12px}
+
+@media(max-width:960px){.sb{display:none}.hero{grid-template-columns:1fr 1px 1fr;}.card-grid.cg-4{grid-template-columns:repeat(2,1fr)}.cg-5{grid-template-columns:repeat(2,1fr)}.panel-row.pr-2,.pr-32,.pr-23{grid-template-columns:1fr}.tier-grid{grid-template-columns:repeat(2,1fr)}}
+
+.jul-badge{background:#fff3cd;color:#856404;font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;border:1px solid #ffc107}
+.delta-chip{font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;display:inline-flex;align-items:center;gap:2px}
+.dc-up{background:rgba(82,183,136,.2);color:#52b788}.dc-dn{background:rgba(230,57,70,.18);color:#ff7d85}.dc-flat{background:rgba(255,255,255,.08);color:rgba(255,255,255,.4)}
+.insight-box{background:linear-gradient(135deg,#0d2b1a,#1a3d28);color:#fff;border-radius:var(--r-lg);padding:18px 20px;margin-bottom:20px}
+.ib-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--g400);margin-bottom:10px}
+.ib-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.ib-item{background:rgba(255,255,255,.06);border-radius:8px;padding:12px}
+.ib-label{font-size:10px;color:rgba(255,255,255,.4);margin-bottom:4px}
+.ib-val{font-size:15px;font-weight:700;letter-spacing:-.3px}
+.ib-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:2px}
+
+.trend-arrow-up{color:#52b788;font-weight:700}
+.trend-arrow-down{color:#e63946;font-weight:700}
+.crit-box{background:linear-gradient(135deg,#7f1d1d,#991b1b);color:#fff;border-radius:var(--r-lg);padding:16px 20px;margin-bottom:16px;display:flex;gap:14px;align-items:flex-start}
+.crit-ic{font-size:24px}
+.crit-title{font-size:13px;font-weight:700;margin-bottom:4px}
+.crit-body{font-size:12px;opacity:.9;line-height:1.6}
+.status-card{transition:transform .12s ease, box-shadow .12s ease}
+.status-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.12)}
+
+.mode-dropdown-wrap{display:flex;gap:8px;align-items:center}
+.mode-sel,.period-sel{background:var(--gray100);border:1px solid var(--gray300);border-radius:var(--r-sm);padding:7px 12px;font-size:12px;font-weight:600;color:var(--gray800);cursor:pointer;font-family:inherit}
+.mode-sel{background:var(--g700);color:#fff;border:none;font-weight:700}
+.benchmark-note{font-size:10px;color:var(--gray500);margin-top:2px}
+.est-badge{background:#fff3cd;color:#856404;font-size:9px;font-weight:700;padding:1px 6px;border-radius:999px;border:1px solid #ffc107;margin-left:6px}
+.no-comparison-box{background:var(--gray50);border:1px dashed var(--gray300);border-radius:var(--r-md);padding:20px;text-align:center;color:var(--gray500);font-size:12px}
+.trend-table{width:100%;border-collapse:collapse}
+.trend-table th{font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:rgba(255,255,255,.5);text-align:right;padding:8px 10px;border-bottom:2px solid rgba(255,255,255,.15)}
+.trend-table th:first-child{text-align:left}
+.trend-table td{padding:9px 10px;text-align:right;border-bottom:1px solid rgba(255,255,255,.08);font-size:13px;color:#fff}
+.trend-table td:first-child{text-align:left;font-weight:600;color:#fff}
+.trend-arrow-up{color:#74c69d;font-weight:700}
+.trend-arrow-down{color:#ff7d85;font-weight:700}
+.crit-box{background:linear-gradient(135deg,#7f1d1d,#991b1b);color:#fff;border-radius:var(--r-lg);padding:16px 20px;margin-bottom:16px;display:flex;gap:14px;align-items:flex-start}
+.crit-ic{font-size:24px}
+.crit-title{font-size:13px;font-weight:700;margin-bottom:4px}
+.crit-body{font-size:12px;opacity:.9;line-height:1.6}
+.status-card{transition:transform .12s ease, box-shadow .12s ease}
+.status-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.12)}
+.insight-box{background:linear-gradient(135deg,#0d2b1a,#1a3d28);color:#fff;border-radius:var(--r-lg);padding:18px 20px;margin-bottom:20px}
+.ib-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--g400);margin-bottom:10px}
+.ib-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.ib-item{background:rgba(255,255,255,.06);border-radius:8px;padding:12px}
+.ib-label{font-size:10px;color:rgba(255,255,255,.4);margin-bottom:4px}
+.ib-val{font-size:15px;font-weight:700;letter-spacing:-.3px}
+.ib-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:2px}
+.delta-chip{font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;display:inline-flex;align-items:center;gap:2px}
+
+.platform-switcher{display:flex;gap:8px;padding:16px 24px 0;background:#e8ebe8}
+.plat-tab{padding:10px 20px;border-radius:10px 10px 0 0;font-size:13px;font-weight:700;cursor:pointer;background:var(--gray100);color:var(--gray500);border:1px solid var(--gray200);border-bottom:none;text-decoration:none;display:inline-block}
+.plat-tab.active{background:#fff;color:var(--g700)}
+.plat-tab.active.tt{color:#000}
+.plat-tab.active.sh{color:#EE4D2D}
+.combined-hero{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px}
+.ch-hero{background:linear-gradient(135deg,#0d2b1a,#1a3d28);border-radius:var(--r-lg);padding:20px;color:#fff}
+.ch-hero-label{font-size:11px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.04em}
+.ch-hero-val{font-size:26px;font-weight:800;margin-top:6px}
+.ch-hero-sub{font-size:11px;color:rgba(255,255,255,.5);margin-top:4px}
+.combined-split-bar{display:flex;height:28px;border-radius:6px;overflow:hidden;margin:10px 0}
+.sh-ch-badge{font-size:9px;background:var(--gray100);padding:2px 6px;border-radius:999px;margin-right:3px}
+.sh-network-flag{color:#b45309;font-size:9px;font-weight:700}
+
+</style>
+
+body{background:#f0f2f0}
+</style>
+</head>
+<body>
+<div class="platform-switcher">
+  <a href="overview.html" class="plat-tab active">📊 Overview</a>
+  <a href="index.html" class="plat-tab tt">🎵 TikTok Shop</a>
+  <a href="shopee.html" class="plat-tab sh">🛍️ Shopee</a>
+</div>
+  <main class="main" style="width:100%">
+    <div class="topbar">
+      <div><div class="tb-title">📊 Overview Gabungan — TikTok + Shopee</div><div class="tb-meta" id="combined-period-label">Major metrics saja, bukan detail</div></div>
+      <div class="tb-right">
+        <div class="mode-dropdown-wrap">
+          <select class="period-sel" id="combinedPeriodSel" onchange="onCombinedPeriodChange(this.value)" title="Overview Gabungan cuma bisa nampilin periode yang datanya ada di KEDUA platform (TikTok dan Shopee).">
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="page active content">
+      <div class="combined-hero" id="combined-hero"></div>
+      <div class="panel" style="margin-bottom:16px">
+        <div class="panel-title">📐 Kontribusi GMV per Platform</div>
+        <div id="combined-split"></div>
+      </div>
+      <div class="panel-row pr-2">
+        <div class="panel">
+          <div class="panel-title">👥 Active Creators <span class="ptag">TIDAK dijumlah</span></div>
+          <div id="combined-creators"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">⚠️ Data Quality Notes</div>
+          <div id="combined-notes"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+<script>
+let D;
+let SHD;
+let CP='jul_w3'; // currently selected Combined Overview period
+const TC={'T1':'#2D6A4F','T2':'#3a7bd5','T3':'#f4a425','T0':'#9ca3af'};
+const TB={'T1':'#d8f3dc','T2':'#ddeeff','T3':'#fef3cd','T0':'#f3f4f6'};
+const TL={'T1':'Elite','T2':'Aktif','T3':'Berkembang','T0':'Long-tail'};
+function R(v){return'Rp '+Math.round(v).toLocaleString('id-ID')}
+function N(v){if(v>=1e9)return(v/1e9).toFixed(1)+'M';if(v>=1e6)return(v/1e6).toFixed(1)+'Jt';if(v>=1e3)return(v/1e3).toFixed(1)+'rb';return String(Math.round(v))}
+function pct(a,b){if(!b)return 0;return Math.round((a-b)/b*100)}
+function ini(s){const w=(s||'X').replace(/[^a-z]/gi,' ').trim().split(' ');return((w[0]||'')[0]||'').toUpperCase()+((w[1]||'')[0]||'').toUpperCase()||'?'}
+
+function onCombinedPeriodChange(key){
+  CP = key;
+  renderCombined();
+}
+
+async function loadDataAndInit(){
+  try {
+    const [ttRes, shRes] = await Promise.all([fetch('data.json'), fetch('data_shopee.json')]);
+    if(!ttRes.ok) throw new Error('TikTok HTTP '+ttRes.status);
+    if(!shRes.ok) throw new Error('Shopee HTTP '+shRes.status);
+    D = await ttRes.json();
+    SHD = await shRes.json();
+    renderCombined();
+  } catch(e) {
+    console.error('Combined data load failed:', e);
+    const el = document.getElementById('combined-hero');
+    if(el) el.innerHTML = '<div style="padding:20px;color:#ff7d85;font-size:13px">⚠️ Gagal memuat data: '+e.message+'. Coba refresh, atau hubungi admin kalau berlanjut.</div>';
+  }
+}
+
+// ===== COMBINED OVERVIEW =====
+function renderCombined(){
+  if(!D || !SHD) {
+    const el = document.getElementById('combined-hero');
+    if(el) el.innerHTML = '<div style="padding:20px;color:rgba(255,255,255,.6);font-size:13px">⏳ Menunggu data TikTok & Shopee selesai dimuat...</div>';
+    return;
+  }
+
+  const COMBINED_PERIODS = [
+    {key:'jul_w3', label:'Juli W3 (15–21 Jul)'},
+    {key:'jul_w2', label:'Juli W2 (8–14 Jul)'},
+    {key:'jul_w1', label:'Juli W1 (1–7 Jul)'},
+  ];
+  const sel = document.getElementById('combinedPeriodSel');
+  if(sel.options.length===0){
+    sel.innerHTML = COMBINED_PERIODS.map(p=>`<option value="${p.key}">${p.label}</option>`).join('');
+    sel.value = CP;
+  }
+
+  const cpLabel = COMBINED_PERIODS.find(p=>p.key===CP).label;
+  const ttOv = D[CP].overview;
+  const shOv = SHD.periods[CP].overview;
+  const combinedGmv = ttOv.total_gmv + shOv.total_gmv;
+  const combinedOrders = ttOv.total_orders + shOv.total_orders;
+  const combinedComm = ttOv.commission + shOv.total_commission;
+  const ttShare = ttOv.total_gmv/combinedGmv*100;
+  const shShare = shOv.total_gmv/combinedGmv*100;
+
+  document.getElementById('combined-period-label').textContent = cpLabel + ' · Major metrics saja, bukan detail';
+
+  document.getElementById('combined-hero').innerHTML = `
+    <div class="ch-hero"><div class="ch-hero-label">GMV Gabungan</div><div class="ch-hero-val">${R(combinedGmv)}</div><div class="ch-hero-sub">TikTok + Shopee, additive</div></div>
+    <div class="ch-hero"><div class="ch-hero-label">Orders Gabungan</div><div class="ch-hero-val">${N(combinedOrders)}</div><div class="ch-hero-sub">TikTok + Shopee, additive</div></div>
+    <div class="ch-hero"><div class="ch-hero-label">Commission Gabungan</div><div class="ch-hero-val">${R(combinedComm)}</div><div class="ch-hero-sub">TikTok + Shopee, additive</div></div>
+  `;
+
+  document.getElementById('combined-split').innerHTML = `
+    <div class="combined-split-bar">
+      <div style="width:${ttShare.toFixed(1)}%;background:#000;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700">TikTok ${ttShare.toFixed(0)}%</div>
+      <div style="width:${shShare.toFixed(1)}%;background:#EE4D2D;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700">Shopee ${shShare.toFixed(0)}%</div>
+    </div>
+    <div style="font-size:11px;color:var(--gray500)">TikTok: ${R(ttOv.total_gmv)} · Shopee: ${R(shOv.total_gmv)}</div>
+  `;
+
+  document.getElementById('combined-creators').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div style="background:var(--gray50);border-radius:8px;padding:14px;text-align:center">
+        <div style="font-size:24px;font-weight:800">${ttOv.active_creators}</div>
+        <div style="font-size:11px;color:var(--gray500)">TikTok creators</div>
+      </div>
+      <div style="background:var(--gray50);border-radius:8px;padding:14px;text-align:center">
+        <div style="font-size:24px;font-weight:800">${shOv.active_creators}</div>
+        <div style="font-size:11px;color:var(--gray500)">Shopee creators</div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--gray500);margin-top:10px;line-height:1.6">
+      Sengaja dipisah, bukan dijumlah jadi ${ttOv.active_creators+shOv.active_creators}. Kita nggak punya cara reliable buat match creator yang sama lintas platform (username beda sistem) — kalau dijumlah, ada risiko double-count creator yang aktif di kedua platform.
+    </div>
+  `;
+
+  document.getElementById('combined-notes').innerHTML = `
+    <div style="font-size:12px;line-height:1.8">
+      <div style="margin-bottom:10px"><strong>Shopee — ${shOv.others_pct}% GMV</strong> dari traffic "Others" (sumber tak teridentifikasi)</div>
+      <div style="margin-bottom:10px"><strong>Shopee — ${SHD.periods[CP].network_count} akun jaringan</strong> terdeteksi (Shopee Media Network, ShopBack, dll) — bukan KOL individual</div>
+      <div style="color:var(--gray500);font-size:11px">Kedua catatan ini nggak dibersihkan dari angka GMV Gabungan di atas — disajikan apa adanya sesuai kesepakatan kita.</div>
+    </div>
+  `;
+}
+
+
+// ===== INIT =====
+loadDataAndInit();
+</script>
+</body>
+</html>
