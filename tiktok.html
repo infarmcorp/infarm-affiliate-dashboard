@@ -159,6 +159,10 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--gray900);fo
 
 /* FILTER TABS */
 .ftabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.search-wrap{position:relative;margin-bottom:12px;max-width:320px}
+.search-input{width:100%;padding:8px 12px 8px 32px;border:1px solid var(--gray300);border-radius:var(--r-sm);font-size:12px;font-family:inherit;color:var(--gray800)}
+.search-input:focus{outline:none;border-color:var(--g500)}
+.search-ic{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--gray500);pointer-events:none}
 .ftab{padding:5px 12px;border-radius:999px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--gray200);color:var(--gray600);background:var(--surface);transition:all .15s;user-select:none}
 .ftab:hover:not(.active){background:var(--gray100)}.ftab.active{background:var(--g700);color:#fff;border-color:var(--g700)}
 
@@ -320,6 +324,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--gray900);fo
     </div>
     <div class="panel">
       <div class="panel-title">📋 Creator Detail — <span id="wk-period-label"></span></div>
+      <div class="search-wrap"><span class="search-ic">🔍</span><input type="text" class="search-input" id="wkSearchInput" placeholder="Cari username/nama creator..." oninput="onWkSearch(this.value)"></div>
       <div class="ftabs" id="wk-ftabs">
         <div class="ftab active" onclick="fWk('all',this)">Semua</div>
         <div class="ftab" onclick="fWk('T1',this)">T1</div>
@@ -341,6 +346,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--gray900);fo
   </div>
 
   <div class="page content" id="page-creators">
+    <div class="search-wrap"><span class="search-ic">🔍</span><input type="text" class="search-input" id="allSearchInput" placeholder="Cari username/nama creator..." oninput="onAllSearch(this.value)"></div>
     <div class="ftabs">
       <div class="ftab active" onclick="fC('all',this)">Semua</div>
       <div class="ftab" onclick="fC('T1',this)">T1</div>
@@ -368,6 +374,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--gray900);fo
 
   <div class="page content" id="page-comparison">
     <div id="cmp-available">
+      <div class="search-wrap"><span class="search-ic">🔍</span><input type="text" class="search-input" id="cmpSearchInput" placeholder="Cari username/nama creator..." oninput="onCmpSearch(this.value)"></div>
       <div class="ftabs" id="cmp-filter-tabs">
         <div class="ftab active" data-filter="all" onclick="fCmp('all',this)">Semua</div>
         <div class="ftab" data-filter="retained" onclick="fCmp('retained',this)">🔄 Retained</div>
@@ -626,10 +633,13 @@ function renderChannelKPI(){
   </div>`;
 }
 
+let allSearchQuery='';
+function onAllSearch(v){ allSearchQuery=v.toLowerCase().trim(); renderAllCreators(); }
 function renderAllCreators(){
   const data=[...periodData(P).top];
   document.getElementById('all-badge').textContent=currentPeriodConfig().label;
-  const filtered=allF==='all'?data:data.filter(c=>c.tier===allF);
+  let filtered=allF==='all'?data:data.filter(c=>c.tier===allF);
+  if(allSearchQuery) filtered=filtered.filter(c=>c.display.toLowerCase().includes(allSearchQuery)||c.username.toLowerCase().includes(allSearchQuery));
   filtered.sort((a,b)=>allD*(b[allS]-a[allS]));
   document.getElementById('all-body').innerHTML=filtered.map(c=>`<tr>
     <td><div class="cc"><div class="av" style="background:${TB[c.tier]};color:${TC[c.tier]}">${ini(c.display)}</div><div><div class="cc-name">${c.display}</div><div class="cc-sub">${N(c.followers)} flw</div></div></div></td>
@@ -644,7 +654,7 @@ function renderAllCreators(){
     <td class="r">${c.lives||0}</td>
     <td class="r"><span class="${rCls(c.refund_rate)}">${c.refund_rate}%</span></td>
     <td class="r">${R(c.commission)}</td>
-  </tr>`).join('')||`<tr><td colspan="12" class="empty">Tidak ada data</td></tr>`;
+  </tr>`).join('')||`<tr><td colspan="12" class="empty">Tidak ada creator yang cocok</td></tr>`;
 }
 function fC(f,el){allF=f;document.querySelectorAll('#page-creators .ftab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderAllCreators()}
 function sAll(f){if(allS===f)allD*=-1;else{allS=f;allD=-1}renderAllCreators()}
@@ -715,9 +725,12 @@ function renderWeekly(){
   }
   renderWkTable();
 }
+let wkSearchQuery='';
+function onWkSearch(v){ wkSearchQuery=v.toLowerCase().trim(); renderWkTable(); }
 function renderWkTable(){
   let data=[...periodData(P).top];
   if(wkF!=='all')data=data.filter(c=>c.tier===wkF);
+  if(wkSearchQuery)data=data.filter(c=>c.display.toLowerCase().includes(wkSearchQuery)||c.username.toLowerCase().includes(wkSearchQuery));
   data.sort((a,b)=>wkD*(b[wkS]-a[wkS]));
   document.getElementById('wk-body').innerHTML=data.map(c=>`<tr>
     <td><div class="cc"><div class="av" style="background:${TB[c.tier]};color:${TC[c.tier]}">${ini(c.display)}</div><div><div class="cc-name">${c.display}</div></div></div></td>
@@ -729,11 +742,13 @@ function renderWkTable(){
     <td class="r">${c.videos}</td>
     <td class="r"><span class="${rCls(c.refund_rate)}">${c.refund_rate}%</span></td>
     <td class="r">${R(c.commission)}</td>
-  </tr>`).join('');
+  </tr>`).join('')||`<tr><td colspan="9" class="empty">Tidak ada creator yang cocok</td></tr>`;
 }
 function fWk(f,el){wkF=f;document.querySelectorAll('#wk-ftabs .ftab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderWkTable()}
 function sWk(f){if(wkS===f)wkD*=-1;else{wkS=f;wkD=-1}renderWkTable()}
 
+let cmpSearchQuery='';
+function onCmpSearch(v){ cmpSearchQuery=v.toLowerCase().trim(); renderComparison(); }
 function renderComparison(){
   const cmpData=getComparisonData();
   const cfg=currentPeriodConfig();
@@ -757,6 +772,7 @@ function renderComparison(){
   else if(cmpF==='down')data=data.filter(c=>c.gmv_delta<0&&c.gmv_a>0);
   else if(cmpF==='new')data=data.filter(c=>c.gmv_a===0&&c.gmv_b>0);
   else if(cmpF==='churn')data=data.filter(c=>c.gmv_b===0&&c.gmv_a>0);
+  if(cmpSearchQuery)data=data.filter(c=>c.display.toLowerCase().includes(cmpSearchQuery)||c.username.toLowerCase().includes(cmpSearchQuery));
   data.sort((a,b)=>cmpD*((b[cmpS]||0)-(a[cmpS]||0)));
   document.getElementById('cmp-count').textContent=`Menampilkan ${data.length} dari ${totalN} creator total`;
   document.getElementById('cmp-body').innerHTML=data.map(c=>{
