@@ -403,29 +403,29 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--gray900);fo
       </div>
     </div>
     <div class="panel" style="margin-bottom:16px">
-      <div class="panel-title">🚀 Top Growers <span class="ptag">Jul W2 → W3, retained creators</span></div>
-      <div style="font-size:11px;color:var(--gray500);margin-bottom:10px">Creator aktif di W2 dan W3 dengan kenaikan GMV absolut terbesar.</div>
-      <table class="dt"><thead><tr><th>Creator</th><th class="r">GMV W2</th><th class="r">GMV W3</th><th class="r">Growth</th><th class="r">Followers</th></tr></thead><tbody id="wl-growers"></tbody></table>
+      <div class="panel-title">🚀 Top Growers <span class="ptag">Jul W3 → W4, retained creators</span></div>
+      <div style="font-size:11px;color:var(--gray500);margin-bottom:10px">Creator aktif di W3 dan W4 dengan kenaikan GMV absolut terbesar.</div>
+      <table class="dt"><thead><tr><th>Creator</th><th class="r">GMV W3</th><th class="r">GMV W4</th><th class="r">Growth</th><th class="r">Followers</th></tr></thead><tbody id="wl-growers"></tbody></table>
     </div>
     <div class="panel" style="margin-bottom:16px">
-      <div class="panel-title">📉 Sharpest Decliners <span class="ptag">Jul W2 → W3, retained creators</span></div>
-      <div style="font-size:11px;color:var(--gray500);margin-bottom:10px">Creator aktif di W2 dan W3 dengan penurunan GMV absolut terbesar. Prioritas reach-out.</div>
-      <table class="dt"><thead><tr><th>Creator</th><th class="r">GMV W2</th><th class="r">GMV W3</th><th class="r">Decline</th><th class="r">Refund W3</th></tr></thead><tbody id="wl-decliners"></tbody></table>
+      <div class="panel-title">📉 Sharpest Decliners <span class="ptag">Jul W3 → W4, retained creators</span></div>
+      <div style="font-size:11px;color:var(--gray500);margin-bottom:10px">Creator aktif di W3 dan W4 dengan penurunan GMV absolut terbesar. Prioritas reach-out.</div>
+      <table class="dt"><thead><tr><th>Creator</th><th class="r">GMV W3</th><th class="r">GMV W4</th><th class="r">Decline</th><th class="r">Refund W4</th></tr></thead><tbody id="wl-decliners"></tbody></table>
     </div>
     <div class="panel" style="margin-bottom:16px">
-      <div class="panel-title">🎥 Top Video Productivity <span class="ptag">Juli MTD · min. 4 video</span></div>
+      <div class="panel-title">🎥 Top Video Productivity <span class="ptag">Juli Full Month · min. 4 video</span></div>
       <div style="font-size:11px;color:var(--gray500);margin-bottom:10px">GMV per video tertinggi — konten paling efisien.</div>
       <table class="dt"><thead><tr><th>Creator</th><th class="r">GMV Total</th><th class="r">Videos</th><th class="r">GMV/Video</th><th class="r">CTR</th></tr></thead><tbody id="wl-video"></tbody></table>
     </div>
     <div class="panel">
-      <div class="panel-title">🔴 Top LIVE Productivity <span class="ptag">Juli MTD · min. 2 sesi LIVE</span></div>
+      <div class="panel-title">🔴 Top LIVE Productivity <span class="ptag">Juli Full Month · min. 2 sesi LIVE</span></div>
       <div style="font-size:11px;color:var(--gray500);margin-bottom:10px">GMV per sesi LIVE tertinggi. n kecil (hanya <span id="wl-live-count"></span> creator pernah LIVE ≥2x) — baca sebagai sinyal awal.</div>
       <table class="dt"><thead><tr><th>Creator</th><th class="r">LIVE GMV</th><th class="r">Sesi</th><th class="r">GMV/Sesi</th><th class="r">Followers</th></tr></thead><tbody id="wl-live"></tbody></table>
     </div>
   </div>
 
   <div class="page content" id="page-alerts">
-    <div class="sec"><div class="sec-hdr"><div class="sec-title">🚨 Red Flags — Terbaru (Juli W3)</div></div><div id="alert-list"></div></div>
+    <div class="sec"><div class="sec-hdr"><div class="sec-title">🚨 Red Flags — Terbaru (Juli W4)</div></div><div id="alert-list"></div></div>
     <div class="sec" style="margin-top:24px"><div class="sec-hdr"><div class="sec-title">✅ Green Signals</div></div><div id="green-list"></div></div>
     <div class="sec" style="margin-top:24px"><div class="sec-hdr"><div class="sec-title">⚡ Action Items</div></div><div id="action-list"></div></div>
   </div>
@@ -810,16 +810,16 @@ function renderWatchlist(){
   const wl=D.watchlist;
   document.getElementById('wl-live-count').textContent=wl.live_productivity_count;
   document.getElementById('wl-growers').innerHTML=wl.top_growers.map(c=>`<tr>
-    <td><div class="cc"><div class="av" style="background:${TB[c.tier_w3]||TB['T0']};color:${TC[c.tier_w3]||TC['T0']}">${ini(c.display)}</div><div class="cc-name">${c.display}</div></div></td>
-    <td class="r">${R(c.gmv_w2)}</td><td class="r"><strong>${R(c.gmv_w3)}</strong></td>
+    <td><div class="cc"><div class="av" style="background:${TB[c.tier_b]||TB['T0']};color:${TC[c.tier_b]||TC['T0']}">${ini(c.display)}</div><div class="cc-name">${c.display}</div></div></td>
+    <td class="r">${R(c.gmv_a)}</td><td class="r"><strong>${R(c.gmv_b)}</strong></td>
     <td class="r"><span class="mc-delta mcd-up">↑ ${c.growth_pct}%</span></td>
     <td class="r">${N(c.followers)}</td>
   </tr>`).join('')||`<tr><td colspan="5" class="empty">Tidak ada data</td></tr>`;
   document.getElementById('wl-decliners').innerHTML=wl.top_decliners.map(c=>`<tr>
-    <td><div class="cc"><div class="av" style="background:${TB[c.tier_w3]||TB['T0']};color:${TC[c.tier_w3]||TC['T0']}">${ini(c.display)}</div><div class="cc-name">${c.display}</div></div></td>
-    <td class="r">${R(c.gmv_w2)}</td><td class="r"><strong>${R(c.gmv_w3)}</strong></td>
+    <td><div class="cc"><div class="av" style="background:${TB[c.tier_b]||TB['T0']};color:${TC[c.tier_b]||TC['T0']}">${ini(c.display)}</div><div class="cc-name">${c.display}</div></div></td>
+    <td class="r">${R(c.gmv_a)}</td><td class="r"><strong>${R(c.gmv_b)}</strong></td>
     <td class="r"><span class="mc-delta mcd-down">↓ ${Math.abs(c.decline_pct)}%</span></td>
-    <td class="r"><span class="${rCls(c.refund_w3)}">${c.refund_w3}%</span></td>
+    <td class="r"><span class="${rCls(c.refund_b)}">${c.refund_b}%</span></td>
   </tr>`).join('')||`<tr><td colspan="5" class="empty">Tidak ada data</td></tr>`;
   document.getElementById('wl-video').innerHTML=wl.video_productivity.map(c=>`<tr>
     <td><div class="cc"><div class="av" style="background:${TB[c.tier]};color:${TC[c.tier]}">${ini(c.display)}</div><div class="cc-name">${c.display}</div></div></td>
