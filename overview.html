@@ -243,6 +243,11 @@ body{background:#f0f2f0}
       <div><div class="tb-title">📊 Overview Gabungan — TikTok + Shopee</div><div class="tb-meta" id="combined-period-label">Major metrics saja, bukan detail</div></div>
       <div class="tb-right">
         <div class="mode-dropdown-wrap">
+          <select class="mode-sel" id="combinedModeSel" onchange="onCombinedModeChange(this.value)">
+            <option value="week">Week</option>
+            <option value="month">Month</option>
+            <option value="mtd">MTD</option>
+          </select>
           <select class="period-sel" id="combinedPeriodSel" onchange="onCombinedPeriodChange(this.value)" title="Overview Gabungan cuma bisa nampilin periode yang datanya ada di KEDUA platform (TikTok dan Shopee).">
           </select>
         </div>
@@ -269,6 +274,7 @@ body{background:#f0f2f0}
 <script>
 let D;
 let SHD;
+let CPM='week'; // currently selected Combined mode
 let CP='jul_w4'; // currently selected Combined Overview period
 const TC={'T1':'#2D6A4F','T2':'#3a7bd5','T3':'#f4a425','T0':'#9ca3af'};
 const TB={'T1':'#d8f3dc','T2':'#ddeeff','T3':'#fef3cd','T0':'#f3f4f6'};
@@ -278,6 +284,35 @@ function N(v){if(v>=1e9)return(v/1e9).toFixed(1)+'M';if(v>=1e6)return(v/1e6).toF
 function pct(a,b){if(!b)return 0;return Math.round((a-b)/b*100)}
 function ini(s){const w=(s||'X').replace(/[^a-z]/gi,' ').trim().split(' ');return((w[0]||'')[0]||'').toUpperCase()+((w[1]||'')[0]||'').toUpperCase()||'?'}
 
+// Only periods present in BOTH D (TikTok) and SHD.periods (Shopee) are eligible here.
+const COMBINED_MODES = {
+  week: [
+    {key:'jul_w4', label:'Juli W4 (22–31 Jul)'},
+    {key:'jul_w3', label:'Juli W3 (15–21 Jul)'},
+    {key:'jul_w2', label:'Juli W2 (8–14 Jul)'},
+    {key:'jul_w1', label:'Juli W1 (1–7 Jul)'},
+  ],
+  month: [
+    {key:'jul', label:'Juli 2026 (Full Month)'},
+    {key:'jun', label:'Juni 2026'},
+  ],
+  mtd: [
+    {key:'jul', label:'Juli (Full Month, 1–31 Jul)'},
+  ],
+};
+
+function onCombinedModeChange(mode){
+  CPM = mode;
+  document.getElementById('combinedModeSel').value = mode;
+  populateCombinedPeriodDropdown();
+  renderCombined();
+}
+function populateCombinedPeriodDropdown(){
+  const sel = document.getElementById('combinedPeriodSel');
+  sel.innerHTML = COMBINED_MODES[CPM].map(p=>`<option value="${p.key}">${p.label}</option>`).join('');
+  CP = COMBINED_MODES[CPM][0].key;
+  sel.value = CP;
+}
 function onCombinedPeriodChange(key){
   CP = key;
   renderCombined();
@@ -290,6 +325,8 @@ async function loadDataAndInit(){
     if(!shRes.ok) throw new Error('Shopee HTTP '+shRes.status);
     D = await ttRes.json();
     SHD = await shRes.json();
+    document.getElementById('combinedModeSel').value = CPM;
+    populateCombinedPeriodDropdown();
     renderCombined();
   } catch(e) {
     console.error('Combined data load failed:', e);
@@ -306,19 +343,7 @@ function renderCombined(){
     return;
   }
 
-  const COMBINED_PERIODS = [
-    {key:'jul_w4', label:'Juli W4 (22–31 Jul)'},
-    {key:'jul_w3', label:'Juli W3 (15–21 Jul)'},
-    {key:'jul_w2', label:'Juli W2 (8–14 Jul)'},
-    {key:'jul_w1', label:'Juli W1 (1–7 Jul)'},
-  ];
-  const sel = document.getElementById('combinedPeriodSel');
-  if(sel.options.length===0){
-    sel.innerHTML = COMBINED_PERIODS.map(p=>`<option value="${p.key}">${p.label}</option>`).join('');
-    sel.value = CP;
-  }
-
-  const cpLabel = COMBINED_PERIODS.find(p=>p.key===CP).label;
+  const cpLabel = COMBINED_MODES[CPM].find(p=>p.key===CP).label;
   const ttOv = D[CP].overview;
   const shOv = SHD.periods[CP].overview;
   const combinedGmv = ttOv.total_gmv + shOv.total_gmv;

@@ -248,9 +248,14 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--gray900);fo
 </aside>
 <main class="main">
   <div class="topbar">
-    <div><div class="tb-title">Overview — Shopee Affiliate</div><div class="tb-meta" id="shTbMeta">Benchmark otomatis mengikuti minggu yang dipilih</div></div>
+    <div><div class="tb-title">Overview — Shopee Affiliate</div><div class="tb-meta" id="shTbMeta">Benchmark otomatis mengikuti mode yang dipilih</div></div>
     <div class="tb-right">
       <div class="mode-dropdown-wrap">
+        <select class="mode-sel" id="shModeSel" onchange="onShModeChange(this.value)">
+          <option value="week">Week</option>
+          <option value="month">Month</option>
+          <option value="mtd">MTD</option>
+        </select>
         <select class="period-sel" id="shPeriodSel" onchange="onShPeriodChange(this.value)">
         </select>
       </div>
@@ -305,6 +310,8 @@ async function loadDataAndInit(){
     const shRes = await fetch('data_shopee.json');
     if(!shRes.ok) throw new Error('HTTP '+shRes.status);
     SHD = await shRes.json();
+    document.getElementById('shModeSel').value = SHPM;
+    shPopulatePeriodDropdown();
     renderShopeeOverview();
   } catch(e) {
     console.error('Shopee data load failed:', e);
@@ -316,15 +323,23 @@ async function loadDataAndInit(){
 // ===== SHOPEE OVERVIEW (multi-period) =====
 const SH_CH_ICON={'Facebook':'📘','Instagram':'📷','Shopee Video':'📹','Shopee Live':'🔴','TikTok':'🎵','YouTube':'▶️','Twitter':'🐦','Others':'❓'};
 let shSortKey='gmv', shSortDir=-1;
+let SHPM='week'; // currently selected Shopee mode
 let SHP='jul_w4'; // currently selected Shopee period
 
 function shCurrentPeriodConfig(){
-  return SHD.modes.week.periods.find(p=>p.key===SHP);
+  return SHD.modes[SHPM].periods.find(p=>p.key===SHP);
 }
 function shPopulatePeriodDropdown(){
   const sel = document.getElementById('shPeriodSel');
-  sel.innerHTML = SHD.modes.week.periods.map(p=>`<option value="${p.key}">${p.label}</option>`).join('');
+  sel.innerHTML = SHD.modes[SHPM].periods.map(p=>`<option value="${p.key}">${p.label}</option>`).join('');
+  SHP = SHD.modes[SHPM].periods[0].key;
   sel.value = SHP;
+}
+function onShModeChange(mode){
+  SHPM = mode;
+  document.getElementById('shModeSel').value = mode;
+  shPopulatePeriodDropdown();
+  renderShopeeOverview();
 }
 function onShPeriodChange(key){
   SHP = key;
@@ -344,7 +359,6 @@ function shCreatorObjects(periodKey){
 
 function renderShopeeOverview(){
   if(!SHD) return;
-  shPopulatePeriodDropdown();
   const cfg = shCurrentPeriodConfig();
   const P = SHD.periods[SHP];
   const ov = P.overview;
@@ -361,7 +375,7 @@ function renderShopeeOverview(){
   }
 
   document.getElementById('sh-hero').innerHTML = `
-    <div class="hero-kpi"><div class="hk-label">GMV Total</div><div class="hk-val big">${R(ov.total_gmv)}</div><div class="hk-sub">7 hari</div>${bench?shDelta(ov.total_gmv,bench.total_gmv):''}</div>
+    <div class="hero-kpi"><div class="hk-label">GMV Total</div><div class="hk-val big">${R(ov.total_gmv)}</div><div class="hk-sub">${ov.days} hari</div>${bench?shDelta(ov.total_gmv,bench.total_gmv):''}</div>
     <div class="hero-sep"></div>
     <div class="hero-kpi"><div class="hk-label">Total Orders</div><div class="hk-val">${N(ov.total_orders)}</div><div class="hk-sub">transaksi</div>${bench?shDelta(ov.total_orders,bench.total_orders):''}</div>
     <div class="hero-sep"></div>
