@@ -159,6 +159,10 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--gray900);fo
 
 /* FILTER TABS */
 .ftabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.search-wrap{position:relative;margin-bottom:12px;max-width:320px}
+.search-input{width:100%;padding:8px 12px 8px 32px;border:1px solid var(--gray300);border-radius:var(--r-sm);font-size:12px;font-family:inherit;color:var(--gray800)}
+.search-input:focus{outline:none;border-color:var(--g500)}
+.search-ic{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--gray500);pointer-events:none}
 .ftab{padding:5px 12px;border-radius:999px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--gray200);color:var(--gray600);background:var(--surface);transition:all .15s;user-select:none}
 .ftab:hover:not(.active){background:var(--gray100)}.ftab.active{background:var(--g700);color:#fff;border-color:var(--g700)}
 
@@ -278,6 +282,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--gray900);fo
     <div class="panel-row pr-32">
       <div class="panel">
         <div class="panel-title">🏅 Top Creator <span class="ptag">Semua <span id="sh-creator-count"></span> creator · klik header buat sort</span></div>
+        <div class="search-wrap"><span class="search-ic">🔍</span><input type="text" class="search-input" id="shSearchInput" placeholder="Cari username/nama creator..." oninput="onShSearch(this.value)"></div>
         <table class="dt"><thead><tr>
           <th class="sortable" onclick="sortSH('nickname')">Creator <span class="sort-ic" id="sh-ic-nickname">↕</span></th>
           <th>Tier</th>
@@ -426,8 +431,11 @@ function renderShopeeOverview(){
   renderSHTable();
 }
 
+let shSearchQuery='';
+function onShSearch(v){ shSearchQuery=v.toLowerCase().trim(); renderSHTable(); }
 function renderSHTable(){
-  const data = shCreatorObjects(SHP);
+  let data = shCreatorObjects(SHP);
+  if(shSearchQuery) data=data.filter(c=>c.nickname.toLowerCase().includes(shSearchQuery)||c.username.toLowerCase().includes(shSearchQuery));
   data.sort((a,b)=>{
     const av=a[shSortKey], bv=b[shSortKey];
     if(typeof av==='string') return shSortDir*av.localeCompare(bv);
@@ -446,7 +454,7 @@ function renderSHTable(){
       <td class="r">${R(c.aov)}</td>
       <td class="r">${c.n_channels}</td>
     </tr>`;
-  }).join('') || `<tr><td colspan="6" class="empty">Tidak ada data</td></tr>`;
+  }).join('') || `<tr><td colspan="6" class="empty">Tidak ada creator yang cocok</td></tr>`;
 }
 function sortSH(key){ if(shSortKey===key) shSortDir*=-1; else {shSortKey=key; shSortDir = key==='nickname'?1:-1;} renderSHTable(); }
 
