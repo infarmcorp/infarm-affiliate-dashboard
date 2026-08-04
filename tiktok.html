@@ -252,7 +252,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--gray900);fo
     <button class="nav-btn" onclick="showPage('alerts')"><span class="nav-ic">🚨</span>Red Flags <span style="margin-left:auto;background:var(--red);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:999px" id="alert-count">5</span></button>
   </nav>
   <div class="sb-foot">
-    <div class="sb-note">Sumber: TikTok Seller Center<br>Folder: Infarm KOL Data<br>Update: 22 Juli 2026</div>
+    <div class="sb-note">Sumber: TikTok Seller Center<br>Folder: Infarm KOL Data<br>Update: 4 Agustus 2026</div>
   </div>
 </aside>
 <main class="main">
@@ -456,7 +456,7 @@ function hydrate(){
     o.gmv_per_day=Math.round(o.gmv/days);
     return o;
   }
-  ['mei','jun','jul_w1','jul_w2','jul_w3','jul_mtd'].forEach(p=>{
+  ['mei','jun','jul_w1','jul_w2','jul_w3','jul_w4','jul','jul_mtd'].forEach(p=>{
     const days=D[p].overview.days;
     D[p].top=D[p].top.map(arr=>rowToObj(arr,days));
   });
@@ -468,10 +468,12 @@ function hydrate(){
   D.comparison_month_jun_mei=D.comparison_month_jun_mei.map(cmpToObj);
   D.comparison_week_w1_w2=D.comparison_week_w1_w2.map(cmpToObj);
   D.comparison_week_w2_w3=D.comparison_week_w2_w3.map(cmpToObj);
+  D.comparison_week_w3_w4=D.comparison_week_w3_w4.map(cmpToObj);
+  D.comparison_month_jul_jun=D.comparison_month_jul_jun.map(cmpToObj);
 }
 
 let PM='week'; // current mode: month|week|mtd
-let P='jul_w3'; // current period key
+let P='jul_w4'; // current period key
 let topS='gmv',topD=-1,allS='gmv',allD=-1,allF='all',cmpS='gmv_delta',cmpD=-1,cmpF='all',wkS='gmv',wkD=-1,wkF='all';
 const TC={'T1':'#2D6A4F','T2':'#3a7bd5','T3':'#f4a425','T0':'#9ca3af'};
 const TB={'T1':'#d8f3dc','T2':'#ddeeff','T3':'#fef3cd','T0':'#f3f4f6'};
@@ -656,11 +658,11 @@ function renderWeekly(){
   document.getElementById('trend-title').textContent=`📅 Trend & Insight — ${cfg.label}`;
   document.getElementById('wk-period-label').textContent=cfg.label;
 
-  // Critical box - only show for week mode W3 (latest) or when refund critical
+  // Critical box - shows for latest period when there's an ongoing concern worth surfacing
   const critBox=document.getElementById('crit-box');
-  if(P==='jul_w3'){
+  if(P==='jul_w4'){
     critBox.style.display='flex';
-    critBox.innerHTML=`<div class="crit-ic">🔴</div><div><div class="crit-title">aku_dan_kamu39: Refund Rate 95.3% di W3</div><div class="crit-body">Eskalasi refund: 23.3% (Jun) → 26.8% (W1) → 43.9% (W2) → <strong>95.3% (W3)</strong>. Hampir seluruh GMV creator ini sekarang balik jadi refund. Ini bukan lagi watch-item, ini emergency yang butuh keputusan freeze/investigasi minggu ini juga.</div></div>`;
+    critBox.innerHTML=`<div class="crit-ic">🟡</div><div><div class="crit-title">aku_dan_kamu39: Refund Membaik ke 55.3%, Tapi Belum Sehat</div><div class="crit-body">Tren refund: 95.3% (W3) → <strong>55.3% (W4)</strong>. Perbaikan nyata, tapi masih ~5x lipat threshold normal (~10%). Jangan tutup kasus ini — lanjut monitoring sampai turun ke level wajar.</div></div>`;
   } else {
     critBox.style.display='none';
   }
@@ -831,21 +833,21 @@ function renderWatchlist(){
 
 function renderAlerts(){
   document.getElementById('alert-list').innerHTML=[
-    {cls:'al-r',title:`🔴 aku_dan_kamu39: Refund Rate 95.3% di W3 — EMERGENCY`,body:`Eskalasi 4 periode berturut: 23.3% (Jun) → 26.8% (W1) → 43.9% (W2) → <strong>95.3% (W3)</strong>. Hampir seluruh GMV creator ini sekarang balik jadi refund. Freeze collaboration segera, jangan tunggu laporan mingguan berikutnya.`},
-    {cls:'al-r',title:`🔴 GMV Bulanan Turun 18.1% (Jun vs Mei)`,body:`Rp 1.721,3Jt (Mei) → Rp 1.409,0Jt (Jun). Commission turun lebih tajam -23.8%. Ini konsisten dengan waktu penerapan flat commission cut awal Juni — dampaknya kelihatan penuh di skala bulanan, bukan cuma di data mingguan.`},
-    {cls:'al-a',title:`🟡 Retained Creators Bulanan (Mei→Jun) Turun 18.9%`,body:`Creator yang aktif di Mei DAN Juni — bukan yang churn — GMV mereka turun 18.9%. Ini menguatkan bahwa commission cut mempengaruhi creator yang stay, bukan cuma yang keluar.`},
+    {cls:'al-a',title:`🟡 aku_dan_kamu39: Refund Turun ke 55.3%, Tapi Masih Jauh di Atas Sehat`,body:`Membaik dari 95.3% (W3) ke <strong>55.3% (W4)</strong> — perbaikan nyata, tapi 55% masih 5x lipat dari threshold normal (~10%). Jangan anggap ini "sudah selesai". Tetap perlu monitoring aktif, bukan status normal.`},
+    {cls:'al-r',title:`🔴 GMV Bulan Penuh Juli Masih Turun 20.2% vs Juni`,body:`Rp 1.409,0Jt (Jun) → Rp 1.124,0Jt (Jul, 31 hari lengkap). Meski minggu-minggu terakhir Juli nunjukkin recovery kuat, secara agregat bulanan dampak commission cut awal Juni belum ke-recover sepenuhnya.`},
+    {cls:'al-a',title:`⚠️ cafadoqila.shop Naik +1118.8% (Rp720rb → Rp8,8Jt) — Perlu Verifikasi`,body:`Growth se-ekstrem ini nggak lazim buat organic growth mingguan. Cek apakah ini genuine (misal viral moment, campaign spesifik) atau ada anomali data/pola yang perlu diinvestigasi sebelum dianggap sinyal positif murni.`},
   ].map(a=>`<div class="alert ${a.cls}"><div><strong>${a.title}</strong><br>${a.body}</div></div>`).join('');
 
   document.getElementById('green-list').innerHTML=[
-    {cls:'al-g',title:`✅ GMV Mingguan Mulai Stabil — W2→W3 +1.9%`,body:`Rp 235,7Jt (W2) → Rp 240,2Jt (W3). Setelah 2 minggu berturut turun (Jun→W1→W2), ini pembalikan arah pertama — meski masih tipis, jangan buru-buru declare "sudah pulih", tapi ini sinyal positif pertama sejak awal Juli.`},
-    {cls:'al-g',title:`✅ Retained Creators Mingguan Balik Positif — W2→W3 +1.6%`,body:`Setelah retained creators turun -10.7% di transisi W1→W2, sekarang naik +1.6% di W2→W3. Kombinasikan dengan insight GMV di atas — ini konsisten menunjukkan titik balik, bukan cuma noise satu metrik.`},
-    {cls:'al-g',title:`✅ Refund Rate Channel Membaik — 11.2% → 10.7%`,body:`Perbaikan kecil tapi konsisten arahnya. Catatan: ini di LUAR pengaruh aku_dan_kamu39 yang justru memburuk — artinya base rate creator lain secara umum membaik.`},
+    {cls:'al-g',title:`✅ GMV Mingguan Lompat +57.6% — W3→W4`,body:`Rp 240,2Jt (W3) → Rp 378,5Jt (W4). Ini akselerasi kuat dari tren positif yang mulai W2→W3 (+1.9%) — 3 minggu berturut arahnya naik, makin meyakinkan ini genuine recovery bukan noise.`},
+    {cls:'al-g',title:`✅ Retained Creators Naik +54.9% — W3→W4`,body:`Creator yang tetap aktif di W3 DAN W4 (bukan yang baru) GMV mereka naik 54.9%. Konsisten dengan lompatan GMV total — recovery ini datang dari creator existing yang makin produktif, bukan cuma volume creator baru.`},
+    {cls:'al-g',title:`✅ Top Grower: kebunnada27 +66.3%, zen_garden1 +55.4%`,body:`Dua top creator justru yang paling nge-drive lompatan ini — kebunnada27 Rp25,8Jt→Rp42,9Jt, zen_garden1 Rp20,6Jt→Rp32,1Jt. Recovery-nya terkonsentrasi di top performer, bukan tersebar merata.`},
   ].map(a=>`<div class="alert ${a.cls}"><div><strong>${a.title}</strong><br>${a.body}</div></div>`).join('');
 
   document.getElementById('action-list').innerHTML=[
-    {cls:'al-a',title:`⚡ Priority 1 (Urgent): Freeze aku_dan_kamu39 Hari Ini`,body:`Refund 95.3% bukan lagi "watch" — ini kemungkinan fraud, produk rusak sistemik, atau manipulasi order. Investigasi & freeze komisi sebelum W4.`},
-    {cls:'al-a',title:`⚡ Priority 2: Validasi Apakah Titik Balik W3 Genuine`,body:`+1.9% GMV dan +1.6% retained growth di W2→W3 masih early signal (1 minggu doang). Perlu data W4 buat konfirmasi ini tren atau cuma fluktuasi. Jangan buat keputusan strategis besar berdasarkan 1 minggu data positif saja.`},
-    {cls:'al-b',title:`⚡ Priority 3: Cross-check Dampak Commission Cut di Bulan Depan`,body:`Kalau GMV Juli MTD tetap di bawah proyeksi vs Juni, itu konfirmasi commission cut punya efek jangka panjang, bukan cuma one-time shock. Siapkan analisis komparatif Juli penuh vs Juni penuh begitu bulan selesai.`},
+    {cls:'al-a',title:`⚡ Priority 1: Lanjutkan Monitoring aku_dan_kamu39 — Jangan Tutup Kasus`,body:`Refund turun tapi belum sehat. Kalau W5/periode depan turun lagi mendekati 10-15%, baru bisa dianggap resolved. Kalau stagnan/naik lagi, eskalasi ulang.`},
+    {cls:'al-a',title:`⚡ Priority 2: Verifikasi cafadoqila.shop`,body:`Cek riwayat konten/campaign creator ini di periode W4 — growth 11x lipat perlu penjelasan konkret sebelum dimasukkan ke playbook "apa yang berhasil".`},
+    {cls:'al-b',title:`⚡ Priority 3: Replikasi Faktor Recovery dari Top Grower`,body:`kebunnada27 dan zen_garden1 sama-sama tumbuh signifikan W3→W4 — worth digali konten/strategi apa yang mereka jalankan periode ini, buat dijadiin referensi ke creator lain.`},
   ].map(a=>`<div class="alert ${a.cls}"><div><strong>${a.title}</strong><br>${a.body}</div></div>`).join('');
 
   document.getElementById('alert-count').textContent='3';
