@@ -163,6 +163,10 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--gray900);fo
 .search-input{width:100%;padding:8px 12px 8px 32px;border:1px solid var(--gray300);border-radius:var(--r-sm);font-size:12px;font-family:inherit;color:var(--gray800)}
 .search-input:focus{outline:none;border-color:var(--g500)}
 .search-ic{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--gray500);pointer-events:none}
+th.sortable{cursor:pointer;user-select:none}
+th.sortable:hover{color:var(--gray800)}
+.sort-ic{opacity:.4;margin-left:2px;font-size:10px}
+.sort-ic.active{opacity:1;color:var(--g500);font-weight:900}
 .ftab{padding:5px 12px;border-radius:999px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--gray200);color:var(--gray600);background:var(--surface);transition:all .15s;user-select:none}
 .ftab:hover:not(.active){background:var(--gray100)}.ftab.active{background:var(--g700);color:#fff;border-color:var(--g700)}
 
@@ -761,10 +765,17 @@ function renderComparison(){
   document.getElementById('cmp-unavailable').style.display='none';
   document.getElementById('cmp-title').textContent=`📊 Creator — ${cfg.prevLabel} vs ${cfg.label}`;
   document.getElementById('cmp-thead').innerHTML=`<tr>
-    <th>Creator</th><th class="r">Followers</th>
-    <th class="r">GMV ${cfg.prevLabel} ↕</th><th class="r">GMV ${cfg.label} ↕</th>
-    <th class="r">Delta ↕</th><th class="r">CTR</th><th class="r">Refund</th><th class="r">Videos</th>
+    <th class="sortable" onclick="sCmp('display')">Creator <span class="sort-ic" id="cmp-ic-display">↕</span></th>
+    <th class="r sortable" onclick="sCmp('followers')">Followers <span class="sort-ic" id="cmp-ic-followers">↕</span></th>
+    <th class="r sortable" onclick="sCmp('gmv_a')">GMV ${cfg.prevLabel} <span class="sort-ic" id="cmp-ic-gmv_a">↕</span></th>
+    <th class="r sortable" onclick="sCmp('gmv_b')">GMV ${cfg.label} <span class="sort-ic" id="cmp-ic-gmv_b">↕</span></th>
+    <th class="r sortable" onclick="sCmp('gmv_delta')">Delta <span class="sort-ic" id="cmp-ic-gmv_delta">↕</span></th>
+    <th class="r sortable" onclick="sCmp('ctr_b')">CTR <span class="sort-ic" id="cmp-ic-ctr_b">↕</span></th>
+    <th class="r sortable" onclick="sCmp('refund_b')">Refund <span class="sort-ic" id="cmp-ic-refund_b">↕</span></th>
+    <th class="r sortable" onclick="sCmp('videos_b')">Videos <span class="sort-ic" id="cmp-ic-videos_b">↕</span></th>
   </tr>`;
+  document.querySelectorAll('#page-comparison .sort-ic').forEach(el=>el.classList.remove('active'));
+  const cmpIc=document.getElementById('cmp-ic-'+cmpS); if(cmpIc){cmpIc.classList.add('active');cmpIc.textContent=cmpD===1?'↑':'↓';}
   let data=[...cmpData];
   const totalN=data.length;
   if(cmpF==='retained')data=data.filter(c=>c.gmv_a>0&&c.gmv_b>0);
@@ -773,7 +784,11 @@ function renderComparison(){
   else if(cmpF==='new')data=data.filter(c=>c.gmv_a===0&&c.gmv_b>0);
   else if(cmpF==='churn')data=data.filter(c=>c.gmv_b===0&&c.gmv_a>0);
   if(cmpSearchQuery)data=data.filter(c=>c.display.toLowerCase().includes(cmpSearchQuery)||c.username.toLowerCase().includes(cmpSearchQuery));
-  data.sort((a,b)=>cmpD*((b[cmpS]||0)-(a[cmpS]||0)));
+  data.sort((a,b)=>{
+    const av=a[cmpS], bv=b[cmpS];
+    if(typeof av==='string') return cmpD*av.localeCompare(bv);
+    return cmpD*((bv||0)-(av||0));
+  });
   document.getElementById('cmp-count').textContent=`Menampilkan ${data.length} dari ${totalN} creator total`;
   document.getElementById('cmp-body').innerHTML=data.map(c=>{
     const dPct=c.gmv_a>0?pct(c.gmv_b,c.gmv_a):100;
@@ -791,7 +806,7 @@ function renderComparison(){
   }).join('')||`<tr><td colspan="8" class="empty">Tidak ada data</td></tr>`;
 }
 function fCmp(f,el){cmpF=f;document.querySelectorAll('#cmp-filter-tabs .ftab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderComparison()}
-function sCmp(f){if(cmpS===f)cmpD*=-1;else{cmpS=f;cmpD=-1}renderComparison()}
+function sCmp(f){if(cmpS===f)cmpD*=-1;else{cmpS=f;cmpD=f==='display'?1:-1}renderComparison()}
 function jumpToCreatorList(filter){
   showPage('comparison');
   cmpF=filter;cmpS='gmv_delta';cmpD=-1;
