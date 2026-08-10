@@ -373,7 +373,7 @@ function renderShopeeOverview(){
   const ov = P.overview;
   const T = P.tiers;
 
-  document.getElementById('shTbMeta').textContent = cfg.hasComparison ? `Benchmark: ${cfg.prevLabel}` : 'Periode pertama dalam data — belum ada pembanding';
+  document.getElementById('shTbMeta').textContent = cfg.hasComparison ? `Benchmark: ${cfg.prevLabel}${cfg.sameMonth?' 📅 periode sama bulan lalu':' ⏮️ minggu sebelumnya'}` : 'Periode pertama dalam data — belum ada pembanding';
 
   const bench = cfg.hasComparison ? SHD.periods[cfg.prevKey].overview : null;
   function shDelta(cur,prev){

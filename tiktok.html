@@ -505,9 +505,9 @@ function currentPeriodConfig(){
 function periodData(p){ return D[p]; }
 function getBenchmark(){
   const cfg=currentPeriodConfig();
-  if(cfg.estimate && cfg.benchmarkKey) return {overview:D[cfg.benchmarkKey], label:cfg.prevLabel, estimate:true, available:true};
-  if(cfg.prevKey) return {overview:D[cfg.prevKey].overview, label:cfg.prevLabel, estimate:false, available:true};
-  return {overview:null, label:null, estimate:false, available:false};
+  if(cfg.estimate && cfg.benchmarkKey) return {overview:D[cfg.benchmarkKey], label:cfg.prevLabel, estimate:true, available:true, sameMonth:false};
+  if(cfg.prevKey) return {overview:D[cfg.prevKey].overview, label:cfg.prevLabel, estimate:false, available:true, sameMonth:!!cfg.sameMonth};
+  return {overview:null, label:null, estimate:false, available:false, sameMonth:false};
 }
 function getComparisonData(){
   const cfg=currentPeriodConfig();
@@ -552,7 +552,7 @@ function renderAll(){
   const cfg=currentPeriodConfig();
   document.getElementById('tbTitle').textContent=`Overview — ${cfg.label}`;
   const bench=getBenchmark();
-  document.getElementById('tbMeta').textContent=bench.available?`Benchmark: ${bench.label}${bench.estimate?' (estimasi)':''}`:'Tidak ada benchmark pembanding untuk periode ini';
+  document.getElementById('tbMeta').textContent=bench.available?`Benchmark: ${bench.label}${bench.estimate?' (estimasi)':''}${bench.sameMonth?' 📅 periode sama bulan lalu':bench.available&&!bench.estimate?' ⏮️ minggu sebelumnya':''}`:'Tidak ada benchmark pembanding untuk periode ini';
   renderHero();renderSecKPIs();renderTop();renderTierDonut();renderGMVSource();renderChannelKPI();
   renderAllCreators();renderAlerts();renderTier();renderWeekly();renderComparison();renderWatchlist();
 }
@@ -702,7 +702,11 @@ function renderWeekly(){
         <td class="${dd>=0?'trend-arrow-up':'trend-arrow-down'}">${dd>=0?'▲':'▼'} ${Math.abs(dd)}%</td></tr>`;
       }).join('')}
     `;
-    document.getElementById('estimate-note').textContent=bench.estimate?'⚠️ Benchmark ini estimasi prorata dari data bulan sebelumnya (bukan actual same-period), karena data harian bulan lalu tidak tersedia dalam pecahan mingguan.':'';
+    let noteText='';
+    if(bench.estimate) noteText='⚠️ Benchmark ini estimasi prorata dari data bulan sebelumnya (bukan actual same-period), karena data harian bulan lalu tidak tersedia dalam pecahan mingguan.';
+    else if(bench.sameMonth) noteText='✅ Ini perbandingan periode yang sama di bulan sebelumnya (apple-to-apple), bukan minggu berurutan — lebih akurat karena durasi hari biasanya matching.';
+    else noteText='⏮️ Ini perbandingan ke minggu sebelumnya (bukan periode sama bulan lalu) — durasi hari bisa beda, baca delta-nya dengan hati-hati.';
+    document.getElementById('estimate-note').textContent=noteText;
     const mx=Math.max(o.total_gmv,bench.overview.total_gmv)*1.15;
     document.getElementById('weekly-bars').innerHTML=[
       {l:bench.label,v:bench.overview.total_gmv,c:'var(--gray400)'},
