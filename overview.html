@@ -276,9 +276,9 @@ let D;
 let SHD;
 let CPM='week'; // currently selected Combined mode
 let CP='agu_w2'; // currently selected Combined Overview period
-const TC={'T1':'#2D6A4F','T2':'#3a7bd5','T3':'#f4a425','T0':'#9ca3af'};
-const TB={'T1':'#d8f3dc','T2':'#ddeeff','T3':'#fef3cd','T0':'#f3f4f6'};
-const TL={'T1':'Elite','T2':'Aktif','T3':'Berkembang','T0':'Long-tail'};
+const TC={'T3':'#2D6A4F','T2':'#3a7bd5','T1':'#f4a425','T0':'#9ca3af'};
+const TB={'T3':'#d8f3dc','T2':'#ddeeff','T1':'#fef3cd','T0':'#f3f4f6'};
+const TL={'T3':'Elite','T2':'Aktif','T1':'Berkembang','T0':'Long-tail'};
 function R(v){return'Rp '+Math.round(v).toLocaleString('id-ID')}
 function N(v){if(v>=1e9)return(v/1e9).toFixed(1)+'M';if(v>=1e6)return(v/1e6).toFixed(1)+'Jt';if(v>=1e3)return(v/1e3).toFixed(1)+'rb';return String(Math.round(v))}
 function pct(a,b){if(!b)return 0;return Math.round((a-b)/b*100)}

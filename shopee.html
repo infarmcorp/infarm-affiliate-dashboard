@@ -112,8 +112,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--gray900);fo
 
 /* BADGES */
 .badge{display:inline-flex;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;white-space:nowrap}
-.t1{background:#d8f3dc;color:#1a5c36}.t2{background:#ddeeff;color:#1a4a8a}
-.t3{background:#fef3cd;color:#7a4a0a}.t0{background:var(--gray200);color:var(--gray600)}
+.t3{background:#d8f3dc;color:#1a5c36}.t2{background:#ddeeff;color:#1a4a8a}
+.t1{background:#fef3cd;color:#7a4a0a}.t0{background:var(--gray200);color:var(--gray600)}
 .move-up{background:var(--g100);color:var(--g700);font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px}
 .move-dn{background:var(--red-bg);color:var(--red);font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px}
 .move-eq{color:var(--gray400);font-size:11px}
@@ -306,9 +306,9 @@ th.sortable:hover{color:var(--gray800)}
 </div>
 <script>
 let SHD;
-const TC={'T1':'#2D6A4F','T2':'#3a7bd5','T3':'#f4a425','T0':'#9ca3af'};
-const TB={'T1':'#d8f3dc','T2':'#ddeeff','T3':'#fef3cd','T0':'#f3f4f6'};
-const TL={'T1':'Elite','T2':'Aktif','T3':'Berkembang','T0':'Long-tail'};
+const TC={'T3':'#2D6A4F','T2':'#3a7bd5','T1':'#f4a425','T0':'#9ca3af'};
+const TB={'T3':'#d8f3dc','T2':'#ddeeff','T1':'#fef3cd','T0':'#f3f4f6'};
+const TL={'T3':'Elite','T2':'Aktif','T1':'Berkembang','T0':'Long-tail'};
 function R(v){return'Rp '+Math.round(v).toLocaleString('id-ID')}
 function N(v){if(v>=1e9)return(v/1e9).toFixed(1)+'M';if(v>=1e6)return(v/1e6).toFixed(1)+'Jt';if(v>=1e3)return(v/1e3).toFixed(1)+'rb';return String(Math.round(v))}
 function pct(a,b){if(!b)return 0;return Math.round((a-b)/b*100)}
@@ -331,7 +331,7 @@ async function loadDataAndInit(){
 
 // ===== SHOPEE OVERVIEW (multi-period) =====
 const SH_CH_ICON={'Facebook':'📘','Instagram':'📷','Shopee Video':'📹','Shopee Live':'🔴','TikTok':'🎵','YouTube':'▶️','Twitter':'🐦','Others':'❓'};
-let shSortKey='gmv', shSortDir=-1;
+let shSortKey='gmv', shSortDir=1;
 let SHPM='week'; // currently selected Shopee mode
 let SHP='agu_w2'; // currently selected Shopee period
 
@@ -402,7 +402,7 @@ function renderShopeeOverview(){
     <div class="mc"><div class="mc-label">Active Creators</div><div class="mc-val">${N(ov.active_creators)}</div><div class="mc-sub">total creator GMV>0 minggu ini</div></div>
   `;
 
-  const ts=['T1','T2','T3','T0'];
+  const ts=['T3','T2','T1','T0'];
   let off=28, paths='';
   ts.forEach(t=>{const dash=T[t].gmv_pct/100*263.9;const gap=263.9-dash;paths+=`<circle cx="55" cy="55" r="42" fill="none" stroke="${TC[t]}" stroke-width="16" stroke-dasharray="${dash.toFixed(1)} ${gap.toFixed(1)}" stroke-dashoffset="${-off+28}" transform="rotate(-90 55 55)"/>`;off+=dash;});
   const legend = ts.map(t=>`<div class="leg-row"><div class="leg-dot" style="background:${TC[t]}"></div><div class="leg-lbl">${t} ${TL[t]} (${T[t].count})</div><div class="leg-val">${R(T[t].gmv)}</div><div class="leg-pct">${T[t].gmv_pct}%</div></div>`).join('');
@@ -460,7 +460,7 @@ function renderSHTable(){
     </tr>`;
   }).join('') || `<tr><td colspan="6" class="empty">Tidak ada creator yang cocok</td></tr>`;
 }
-function sortSH(key){ if(shSortKey===key) shSortDir*=-1; else {shSortKey=key; shSortDir = key==='nickname'?1:-1;} renderSHTable(); }
+function sortSH(key){ if(shSortKey===key) shSortDir*=-1; else {shSortKey=key; shSortDir = 1;} renderSHTable(); }
 
 
 // ===== INIT =====

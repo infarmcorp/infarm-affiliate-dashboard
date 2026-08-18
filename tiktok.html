@@ -112,8 +112,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--gray900);fo
 
 /* BADGES */
 .badge{display:inline-flex;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;white-space:nowrap}
-.t1{background:#d8f3dc;color:#1a5c36}.t2{background:#ddeeff;color:#1a4a8a}
-.t3{background:#fef3cd;color:#7a4a0a}.t0{background:var(--gray200);color:var(--gray600)}
+.t3{background:#d8f3dc;color:#1a5c36}.t2{background:#ddeeff;color:#1a4a8a}
+.t1{background:#fef3cd;color:#7a4a0a}.t0{background:var(--gray200);color:var(--gray600)}
 .move-up{background:var(--g100);color:var(--g700);font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px}
 .move-dn{background:var(--red-bg);color:var(--red);font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px}
 .move-eq{color:var(--gray400);font-size:11px}
@@ -331,9 +331,9 @@ th.sortable:hover{color:var(--gray800)}
       <div class="search-wrap"><span class="search-ic">🔍</span><input type="text" class="search-input" id="wkSearchInput" placeholder="Cari username/nama creator..." oninput="onWkSearch(this.value)"></div>
       <div class="ftabs" id="wk-ftabs">
         <div class="ftab active" onclick="fWk('all',this)">Semua</div>
-        <div class="ftab" onclick="fWk('T1',this)">T1</div>
+        <div class="ftab" onclick="fWk('T3',this)">T3 Elite</div>
         <div class="ftab" onclick="fWk('T2',this)">T2</div>
-        <div class="ftab" onclick="fWk('T3',this)">T3</div>
+        <div class="ftab" onclick="fWk('T1',this)">T1</div>
         <div class="ftab" onclick="fWk('T0',this)">T0 Long-tail</div>
       </div>
       <table class="dt"><thead><tr>
@@ -353,9 +353,9 @@ th.sortable:hover{color:var(--gray800)}
     <div class="search-wrap"><span class="search-ic">🔍</span><input type="text" class="search-input" id="allSearchInput" placeholder="Cari username/nama creator..." oninput="onAllSearch(this.value)"></div>
     <div class="ftabs">
       <div class="ftab active" onclick="fC('all',this)">Semua</div>
-      <div class="ftab" onclick="fC('T1',this)">T1</div>
-      <div class="ftab" onclick="fC('T2',this)">T2</div>
       <div class="ftab" onclick="fC('T3',this)">T3</div>
+      <div class="ftab" onclick="fC('T2',this)">T2</div>
+      <div class="ftab" onclick="fC('T1',this)">T1</div>
       <div class="ftab" onclick="fC('T0',this)">T0</div>
     </div>
     <div class="panel">
@@ -489,10 +489,10 @@ function hydrate(){
 
 let PM='week'; // current mode: month|week|mtd
 let P='agu_w2'; // current period key
-let topS='gmv',topD=-1,allS='gmv',allD=-1,allF='all',cmpS='gmv_delta',cmpD=-1,cmpF='all',wkS='gmv',wkD=-1,wkF='all';
-const TC={'T1':'#2D6A4F','T2':'#3a7bd5','T3':'#f4a425','T0':'#9ca3af'};
-const TB={'T1':'#d8f3dc','T2':'#ddeeff','T3':'#fef3cd','T0':'#f3f4f6'};
-const TL={'T1':'Elite','T2':'Aktif','T3':'Berkembang','T0':'Long-tail'};
+let topS='gmv',topD=1,allS='gmv',allD=1,allF='all',cmpS='gmv_delta',cmpD=1,cmpF='all',wkS='gmv',wkD=1,wkF='all';
+const TC={'T3':'#2D6A4F','T2':'#3a7bd5','T1':'#f4a425','T0':'#9ca3af'};
+const TB={'T3':'#d8f3dc','T2':'#ddeeff','T1':'#fef3cd','T0':'#f3f4f6'};
+const TL={'T3':'Elite','T2':'Aktif','T1':'Berkembang','T0':'Long-tail'};
 
 function R(v){return'Rp '+Math.round(v).toLocaleString('id-ID')}
 function N(v){if(v>=1e9)return(v/1e9).toFixed(1)+'M';if(v>=1e6)return(v/1e6).toFixed(1)+'Jt';if(v>=1e3)return(v/1e3).toFixed(1)+'rb';return String(Math.round(v))}
@@ -598,7 +598,7 @@ function renderSecKPIs(){
 
 function renderTop(){
   const data=[...periodData(P).top];
-  data.sort((a,b)=>topD*(b[topS]-a[topS]));
+  data.sort((a,b)=>{const av=a[topS],bv=b[topS];if(typeof av==='string')return topD*av.localeCompare(bv);return topD*((bv||0)-(av||0));});
   document.getElementById('top-badge').textContent=currentPeriodConfig().label;
   document.getElementById('top-body').innerHTML=data.slice(0,8).map(c=>`<tr>
     <td><div class="cc"><div class="av" style="background:${TB[c.tier]};color:${TC[c.tier]}">${ini(c.display)}</div><div><div class="cc-name">${c.display}</div><div class="cc-sub">${N(c.followers)} flw</div></div></div></td>
@@ -611,11 +611,11 @@ function renderTop(){
     <td class="r"><span class="${rCls(c.refund_rate)}">${c.refund_rate}%</span></td>
   </tr>`).join('');
 }
-function sTop(f){if(topS===f)topD*=-1;else{topS=f;topD=-1}renderTop()}
+function sTop(f){if(topS===f)topD*=-1;else{topS=f;topD=1}renderTop()}
 
 function renderTierDonut(){
   const T=periodData(P).tiers;
-  const ts=['T1','T2','T3','T0'];
+  const ts=['T3','T2','T1','T0'];
   let off=28;let paths='';
   ts.forEach(t=>{const dash=T[t].gmv_pct/100*263.9;const gap=263.9-dash;paths+=`<circle cx="55" cy="55" r="42" fill="none" stroke="${TC[t]}" stroke-width="16" stroke-dasharray="${dash.toFixed(1)} ${gap.toFixed(1)}" stroke-dashoffset="${-off+28}" transform="rotate(-90 55 55)"/>`;off+=dash;});
   document.getElementById('tier-donut').innerHTML=`<div class="donut-wrap"><svg width="110" height="110" viewBox="0 0 110 110"><circle cx="55" cy="55" r="42" fill="none" stroke="#e5e7eb" stroke-width="16"/>${paths}<text x="55" y="49" text-anchor="middle" font-size="13" font-weight="700" fill="#111827">${T.T1.count}</text><text x="55" y="62" text-anchor="middle" font-size="9" fill="#6b7280">T1</text></svg><div class="donut-leg">${ts.map(t=>`<div class="leg-row"><div class="leg-dot" style="background:${TC[t]}"></div><div class="leg-lbl">${t} ${TL[t]} (${T[t].count})</div><div class="leg-val">${R(T[t].gmv)}</div><div class="leg-pct">${T[t].gmv_pct}%</div></div>`).join('')}</div></div>`;
@@ -648,7 +648,7 @@ function renderAllCreators(){
   document.getElementById('all-badge').textContent=currentPeriodConfig().label;
   let filtered=allF==='all'?data:data.filter(c=>c.tier===allF);
   if(allSearchQuery) filtered=filtered.filter(c=>c.display.toLowerCase().includes(allSearchQuery)||c.username.toLowerCase().includes(allSearchQuery));
-  filtered.sort((a,b)=>allD*(b[allS]-a[allS]));
+  filtered.sort((a,b)=>{const av=a[allS],bv=b[allS];if(typeof av==='string')return allD*av.localeCompare(bv);return allD*((bv||0)-(av||0));});
   document.getElementById('all-body').innerHTML=filtered.map(c=>`<tr>
     <td><div class="cc"><div class="av" style="background:${TB[c.tier]};color:${TC[c.tier]}">${ini(c.display)}</div><div><div class="cc-name">${c.display}</div><div class="cc-sub">${N(c.followers)} flw</div></div></div></td>
     <td><span class="badge ${c.tier.toLowerCase()}">${c.tier}</span></td>
@@ -665,7 +665,7 @@ function renderAllCreators(){
   </tr>`).join('')||`<tr><td colspan="12" class="empty">Tidak ada creator yang cocok</td></tr>`;
 }
 function fC(f,el){allF=f;document.querySelectorAll('#page-creators .ftab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderAllCreators()}
-function sAll(f){if(allS===f)allD*=-1;else{allS=f;allD=-1}renderAllCreators()}
+function sAll(f){if(allS===f)allD*=-1;else{allS=f;allD=1}renderAllCreators()}
 
 function renderWeekly(){
   const cfg=currentPeriodConfig();
@@ -743,7 +743,7 @@ function renderWkTable(){
   let data=[...periodData(P).top];
   if(wkF!=='all')data=data.filter(c=>c.tier===wkF);
   if(wkSearchQuery)data=data.filter(c=>c.display.toLowerCase().includes(wkSearchQuery)||c.username.toLowerCase().includes(wkSearchQuery));
-  data.sort((a,b)=>wkD*(b[wkS]-a[wkS]));
+  data.sort((a,b)=>{const av=a[wkS],bv=b[wkS];if(typeof av==='string')return wkD*av.localeCompare(bv);return wkD*((bv||0)-(av||0));});
   document.getElementById('wk-body').innerHTML=data.map(c=>`<tr>
     <td><div class="cc"><div class="av" style="background:${TB[c.tier]};color:${TC[c.tier]}">${ini(c.display)}</div><div><div class="cc-name">${c.display}</div></div></div></td>
     <td><span class="badge ${c.tier.toLowerCase()}">${c.tier}</span></td>
@@ -757,7 +757,7 @@ function renderWkTable(){
   </tr>`).join('')||`<tr><td colspan="9" class="empty">Tidak ada creator yang cocok</td></tr>`;
 }
 function fWk(f,el){wkF=f;document.querySelectorAll('#wk-ftabs .ftab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderWkTable()}
-function sWk(f){if(wkS===f)wkD*=-1;else{wkS=f;wkD=-1}renderWkTable()}
+function sWk(f){if(wkS===f)wkD*=-1;else{wkS=f;wkD=1}renderWkTable()}
 
 let cmpSearchQuery='';
 function onCmpSearch(v){ cmpSearchQuery=v.toLowerCase().trim(); renderComparison(); }
@@ -814,7 +814,7 @@ function renderComparison(){
   }).join('')||`<tr><td colspan="8" class="empty">Tidak ada data</td></tr>`;
 }
 function fCmp(f,el){cmpF=f;document.querySelectorAll('#cmp-filter-tabs .ftab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderComparison()}
-function sCmp(f){if(cmpS===f)cmpD*=-1;else{cmpS=f;cmpD=f==='display'?1:-1}renderComparison()}
+function sCmp(f){if(cmpS===f)cmpD*=-1;else{cmpS=f;cmpD=1}renderComparison()}
 function jumpToCreatorList(filter){
   showPage('comparison');
   cmpF=filter;cmpS='gmv_delta';cmpD=-1;
@@ -823,7 +823,7 @@ function jumpToCreatorList(filter){
 }
 
 function renderTier(){
-  const T=periodData(P).tiers;const ts=['T1','T2','T3','T0'];
+  const T=periodData(P).tiers;const ts=['T3','T2','T1','T0'];
   document.getElementById('tier-period-label').textContent=currentPeriodConfig().label;
   document.getElementById('tier-grid').innerHTML=ts.map(t=>`
     <div class="tier-card"><div class="tc-head" style="background:${TB[t]}"><span class="tc-name" style="color:${TC[t]}">${t} ${TL[t]}</span><span class="badge ${t.toLowerCase()}">${T[t].count}</span></div>
