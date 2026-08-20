@@ -477,7 +477,7 @@ function toggleShChannelDetail(username, safeId){
   const detail = P.channel_detail && P.channel_detail[username];
   const cell = row.querySelector('td');
   if(!detail){
-    cell.innerHTML = `<div style="font-size:11px;color:var(--gray500);padding:4px 0">📭 Detail breakdown channel belum tersedia untuk periode ini (baru ada mulai Agustus W1).</div>`;
+    cell.innerHTML = `<div style="font-size:11px;color:var(--gray500);padding:4px 0">📭 Detail breakdown channel belum tersedia untuk periode ini.</div>`;
   } else {
     const rows = Object.entries(detail).sort((a,b)=>b[1].gmv-a[1].gmv);
     const totalGmv = rows.reduce((s,[,v])=>s+v.gmv,0);
@@ -502,7 +502,7 @@ function renderChannelBreakdown(){
   const el = document.getElementById('sh-channel-breakdown');
   if(!P.channel_summary){
     panel.querySelector('.panel-title').innerHTML = '📡 GMV by Channel <span class="ptag">Belum tersedia untuk periode ini</span>';
-    el.innerHTML = `<div style="font-size:11px;color:var(--gray500);padding:8px 0">📭 Breakdown GMV per channel baru tersedia mulai Agustus W1. Periode sebelum itu cuma nyimpen daftar channel yang dipakai, bukan nilai GMV-nya.</div>`;
+    el.innerHTML = `<div style="font-size:11px;color:var(--gray500);padding:8px 0">📭 Breakdown GMV per channel belum tersedia untuk periode ini.</div>`;
     return;
   }
   panel.querySelector('.panel-title').innerHTML = '📡 GMV by Channel <span class="ptag">Overall, semua creator</span>';
