@@ -283,9 +283,13 @@ th.sortable:hover{color:var(--gray800)}
         <div id="sh-trend-bars"></div>
       </div>
     </div>
+    <div class="panel" style="margin-bottom:16px" id="sh-channel-panel">
+      <div class="panel-title">📡 GMV by Channel <span class="ptag">Overall, semua creator</span></div>
+      <div id="sh-channel-breakdown"></div>
+    </div>
     <div class="panel-row pr-32">
       <div class="panel">
-        <div class="panel-title">🏅 Top Creator <span class="ptag">Semua <span id="sh-creator-count"></span> creator · klik header buat sort</span></div>
+        <div class="panel-title">🏅 Top Creator <span class="ptag">Semua <span id="sh-creator-count"></span> creator · klik header buat sort · klik baris buat lihat breakdown channel</span></div>
         <div class="search-wrap"><span class="search-ic">🔍</span><input type="text" class="search-input" id="shSearchInput" placeholder="Cari username/nama creator..." oninput="onShSearch(this.value)"></div>
         <table class="dt"><thead><tr>
           <th class="sortable" onclick="sortSH('nickname')">Creator <span class="sort-ic" id="sh-ic-nickname">↕</span></th>
@@ -432,6 +436,7 @@ function renderShopeeOverview(){
     document.getElementById('sh-trend-row').style.display='none';
   }
 
+  renderChannelBreakdown();
   renderSHTable();
 }
 
@@ -450,17 +455,65 @@ function renderSHTable(){
   document.getElementById('sh-tbody').innerHTML = data.map(c=>{
     const chBadges = c.channels.map(ch=>`<span class="sh-ch-badge">${SH_CH_ICON[ch]||'❓'} ${ch}</span>`).join('');
     const flag = c.is_network ? ' <span class="sh-network-flag">⚠️ akun jaringan</span>' : '';
-    return `<tr>
+    const safeId = c.username.replace(/[^a-zA-Z0-9]/g,'_');
+    return `<tr class="sh-creator-row" onclick="toggleShChannelDetail('${c.username.replace(/'/g,"\\'")}','${safeId}')" style="cursor:pointer">
       <td><div class="cc"><div class="av" style="background:${TB[c.tier]};color:${TC[c.tier]}">${ini(c.nickname)}</div><div><div class="cc-name">${c.nickname}${flag}</div><div class="cc-sub">${chBadges}</div></div></div></td>
       <td><span class="badge ${c.tier.toLowerCase()}">${c.tier}</span></td>
       <td class="r"><strong>${R(c.gmv)}</strong></td>
       <td class="r">${c.orders}</td>
       <td class="r">${R(c.aov)}</td>
       <td class="r">${c.n_channels}</td>
-    </tr>`;
+    </tr>
+    <tr class="sh-detail-row" id="sh-detail-${safeId}" style="display:none"><td colspan="6" style="background:var(--gray50);padding:12px 16px"></td></tr>`;
   }).join('') || `<tr><td colspan="6" class="empty">Tidak ada creator yang cocok</td></tr>`;
 }
+function toggleShChannelDetail(username, safeId){
+  const row = document.getElementById('sh-detail-'+safeId);
+  if(!row) return;
+  const isOpen = row.style.display !== 'none';
+  document.querySelectorAll('.sh-detail-row').forEach(r=>r.style.display='none');
+  if(isOpen) return;
+  const P = SHD.periods[SHP];
+  const detail = P.channel_detail && P.channel_detail[username];
+  const cell = row.querySelector('td');
+  if(!detail){
+    cell.innerHTML = `<div style="font-size:11px;color:var(--gray500);padding:4px 0">📭 Detail breakdown channel belum tersedia untuk periode ini (baru ada mulai Agustus W1).</div>`;
+  } else {
+    const rows = Object.entries(detail).sort((a,b)=>b[1].gmv-a[1].gmv);
+    const totalGmv = rows.reduce((s,[,v])=>s+v.gmv,0);
+    cell.innerHTML = `<div style="font-size:12px;font-weight:700;margin-bottom:8px">📡 Breakdown channel untuk creator ini:</div>` +
+      rows.map(([ch,v])=>{
+        const pct = totalGmv>0 ? Math.round(v.gmv/totalGmv*100) : 0;
+        return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:11px">
+          <span style="width:110px">${SH_CH_ICON[ch]||'❓'} ${ch}</span>
+          <div style="flex:1;background:var(--gray200);border-radius:4px;height:14px;overflow:hidden"><div style="width:${pct}%;background:var(--g500);height:100%"></div></div>
+          <span style="width:130px;text-align:right">${R(v.gmv)}</span>
+          <span style="width:40px;text-align:right;color:var(--gray500)">${pct}%</span>
+          <span style="width:70px;text-align:right;color:var(--gray500)">${v.orders} ord</span>
+        </div>`;
+      }).join('');
+  }
+  row.style.display='table-row';
+}
 function sortSH(key){ if(shSortKey===key) shSortDir*=-1; else {shSortKey=key; shSortDir = 1;} renderSHTable(); }
+function renderChannelBreakdown(){
+  const P = SHD.periods[SHP];
+  const panel = document.getElementById('sh-channel-panel');
+  const el = document.getElementById('sh-channel-breakdown');
+  if(!P.channel_summary){
+    panel.querySelector('.panel-title').innerHTML = '📡 GMV by Channel <span class="ptag">Belum tersedia untuk periode ini</span>';
+    el.innerHTML = `<div style="font-size:11px;color:var(--gray500);padding:8px 0">📭 Breakdown GMV per channel baru tersedia mulai Agustus W1. Periode sebelum itu cuma nyimpen daftar channel yang dipakai, bukan nilai GMV-nya.</div>`;
+    return;
+  }
+  panel.querySelector('.panel-title').innerHTML = '📡 GMV by Channel <span class="ptag">Overall, semua creator</span>';
+  const entries = Object.entries(P.channel_summary).sort((a,b)=>b[1].gmv-a[1].gmv);
+  const maxGmv = Math.max(...entries.map(([,v])=>v.gmv));
+  el.innerHTML = entries.map(([ch,v])=>`
+    <div class="bar-row">
+      <div class="bar-meta"><span class="bar-lbl">${SH_CH_ICON[ch]||'❓'} ${ch} <span style="color:var(--gray500);font-weight:400">(${v.creator_count} creator)</span></span><span class="bar-val">${R(v.gmv)} · ${v.gmv_pct}%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${v.gmv/maxGmv*100}%;background:${ch==='Others'?'var(--amber)':'var(--g500)'}"></div></div>
+    </div>`).join('');
+}
 
 
 // ===== INIT =====
