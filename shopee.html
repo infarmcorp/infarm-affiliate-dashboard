@@ -498,6 +498,7 @@ function toggleShChannelDetail(username, safeId){
 function sortSH(key){ if(shSortKey===key) shSortDir*=-1; else {shSortKey=key; shSortDir = 1;} renderSHTable(); }
 function renderChannelBreakdown(){
   const P = SHD.periods[SHP];
+  const cfg = shCurrentPeriodConfig();
   const panel = document.getElementById('sh-channel-panel');
   const el = document.getElementById('sh-channel-breakdown');
   if(!P.channel_summary){
@@ -505,14 +506,37 @@ function renderChannelBreakdown(){
     el.innerHTML = `<div style="font-size:11px;color:var(--gray500);padding:8px 0">📭 Breakdown GMV per channel belum tersedia untuk periode ini.</div>`;
     return;
   }
-  panel.querySelector('.panel-title').innerHTML = '📡 GMV by Channel <span class="ptag">Overall, semua creator</span>';
+  const bench = (cfg.hasComparison && cfg.prevKey) ? SHD.periods[cfg.prevKey] : null;
+  const benchSummary = bench && bench.channel_summary;
+  panel.querySelector('.panel-title').innerHTML = benchSummary
+    ? `📡 GMV by Channel <span class="ptag">Overall · vs ${cfg.prevLabel}</span>`
+    : '📡 GMV by Channel <span class="ptag">Overall, semua creator</span>';
   const entries = Object.entries(P.channel_summary).sort((a,b)=>b[1].gmv-a[1].gmv);
   const maxGmv = Math.max(...entries.map(([,v])=>v.gmv));
-  el.innerHTML = entries.map(([ch,v])=>`
+  el.innerHTML = entries.map(([ch,v])=>{
+    let deltaBadge = '';
+    if(benchSummary){
+      const prevGmv = benchSummary[ch] ? benchSummary[ch].gmv : 0;
+      if(prevGmv === 0 && v.gmv > 0){
+        deltaBadge = `<span class="hk-delta hd-up" style="margin-top:0;margin-left:6px">🆕 baru</span>`;
+      } else if(prevGmv > 0){
+        const d = Math.round((v.gmv-prevGmv)/prevGmv*100);
+        if(d !== 0) deltaBadge = `<span class="hk-delta ${d>0?'hd-up':'hd-down'}" style="margin-top:0;margin-left:6px">${d>0?'▲':'▼'} ${Math.abs(d)}%</span>`;
+      }
+    }
+    return `
     <div class="bar-row">
-      <div class="bar-meta"><span class="bar-lbl">${SH_CH_ICON[ch]||'❓'} ${ch} <span style="color:var(--gray500);font-weight:400">(${v.creator_count} creator)</span></span><span class="bar-val">${R(v.gmv)} · ${v.gmv_pct}%</span></div>
+      <div class="bar-meta"><span class="bar-lbl">${SH_CH_ICON[ch]||'❓'} ${ch} <span style="color:var(--gray500);font-weight:400">(${v.creator_count} creator)</span></span><span class="bar-val">${R(v.gmv)} · ${v.gmv_pct}%${deltaBadge}</span></div>
       <div class="bar-track"><div class="bar-fill" style="width:${v.gmv/maxGmv*100}%;background:${ch==='Others'?'var(--amber)':'var(--g500)'}"></div></div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
+  if(benchSummary){
+    // Flag channels that existed in benchmark but vanished entirely this period
+    const vanished = Object.keys(benchSummary).filter(ch => !P.channel_summary[ch]);
+    if(vanished.length){
+      el.innerHTML += `<div style="font-size:11px;color:var(--gray500);margin-top:8px">📉 Channel yang ada di ${cfg.prevLabel} tapi nggak ada GMV-nya periode ini: ${vanished.map(ch=>SH_CH_ICON[ch]+' '+ch).join(', ')}</div>`;
+    }
+  }
 }
 
 
