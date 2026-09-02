@@ -260,7 +260,7 @@ th.sortable:hover{color:var(--gray800)}
     <button class="nav-btn" onclick="showPage('alerts')"><span class="nav-ic">🚨</span>Red Flags <span style="margin-left:auto;background:var(--red);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:999px" id="alert-count">5</span></button>
   </nav>
   <div class="sb-foot">
-    <div class="sb-note">Sumber: TikTok Seller Center<br>Folder: Infarm KOL Data<br>Update: 23 Agustus 2026</div>
+    <div class="sb-note">Sumber: TikTok Seller Center<br>Folder: Infarm KOL Data<br>Update: 2 September 2026</div>
   </div>
 </aside>
 <main class="main">
@@ -410,33 +410,33 @@ th.sortable:hover{color:var(--gray800)}
     <div class="insight-box">
       <div class="ib-title">⭐ Watchlist — Rekomendasi Berbasis Performa</div>
       <div style="font-size:12px;color:rgba(255,255,255,.75);line-height:1.6">
-        4 daftar otomatis. <strong>Growers & Decliners</strong> selalu pakai transisi minggu terakhir yang tersedia (Agu W2→W3), terlepas dari Mode/Period yang kamu pilih di atas. <strong>Video & LIVE Productivity</strong> pakai Agustus MTD (1–21 Agu) — di-refresh tiap update biar nggak ketinggalan, sample lebih besar dari 1 minggu doang.
+        4 daftar otomatis. <strong>Growers & Decliners</strong> selalu pakai transisi minggu terakhir yang tersedia (Agu W3→W4), terlepas dari Mode/Period yang kamu pilih di atas. <strong>Video & LIVE Productivity</strong> pakai Agustus Full Month (1–31 Agu) — di-refresh tiap update biar nggak ketinggalan, sample lebih besar dari 1 minggu doang.
       </div>
     </div>
     <div class="panel" style="margin-bottom:16px">
-      <div class="panel-title">🚀 Top Growers <span class="ptag">Agu W2 → W3, retained creators</span></div>
-      <div style="font-size:11px;color:var(--gray500);margin-bottom:10px">Creator aktif di Agu W2 dan W3 dengan kenaikan GMV absolut terbesar. Durasi kedua periode sama (7 hari), jadi fair comparison.</div>
-      <table class="dt"><thead><tr><th>Creator</th><th class="r">GMV Agu W2</th><th class="r">GMV Agu W3</th><th class="r">Growth</th><th class="r">Followers</th></tr></thead><tbody id="wl-growers"></tbody></table>
+      <div class="panel-title">🚀 Top Growers <span class="ptag">Agu W3 → W4, retained creators</span></div>
+      <div style="font-size:11px;color:var(--gray500);margin-bottom:10px">Creator aktif di Agu W3 dan W4 dengan kenaikan GMV absolut terbesar. ⚠️ Durasi beda (7 hari vs 10 hari), sebagian kenaikan bisa efek durasi.</div>
+      <table class="dt"><thead><tr><th>Creator</th><th class="r">GMV Agu W3</th><th class="r">GMV Agu W4</th><th class="r">Growth</th><th class="r">Followers</th></tr></thead><tbody id="wl-growers"></tbody></table>
     </div>
     <div class="panel" style="margin-bottom:16px">
-      <div class="panel-title">📉 Sharpest Decliners <span class="ptag">Agu W2 → W3, retained creators</span></div>
-      <div style="font-size:11px;color:var(--gray500);margin-bottom:10px">Creator aktif di Agu W2 dan W3 dengan penurunan GMV absolut terbesar.</div>
-      <table class="dt"><thead><tr><th>Creator</th><th class="r">GMV Agu W2</th><th class="r">GMV Agu W3</th><th class="r">Decline</th><th class="r">Refund Agu W3</th></tr></thead><tbody id="wl-decliners"></tbody></table>
+      <div class="panel-title">📉 Sharpest Decliners <span class="ptag">Agu W3 → W4, retained creators</span></div>
+      <div style="font-size:11px;color:var(--gray500);margin-bottom:10px">Creator aktif di Agu W3 dan W4 dengan penurunan GMV absolut terbesar.</div>
+      <table class="dt"><thead><tr><th>Creator</th><th class="r">GMV Agu W3</th><th class="r">GMV Agu W4</th><th class="r">Decline</th><th class="r">Refund Agu W4</th></tr></thead><tbody id="wl-decliners"></tbody></table>
     </div>
     <div class="panel" style="margin-bottom:16px">
-      <div class="panel-title">🎥 Top Video Productivity <span class="ptag">Agustus MTD (1–21 Agu) · min. 4 video</span></div>
+      <div class="panel-title">🎥 Top Video Productivity <span class="ptag">Agustus Full Month (1–31 Agu) · min. 4 video</span></div>
       <div style="font-size:11px;color:var(--gray500);margin-bottom:10px">GMV per video tertinggi — konten paling efisien.</div>
       <table class="dt"><thead><tr><th>Creator</th><th class="r">GMV Total</th><th class="r">Videos</th><th class="r">GMV/Video</th><th class="r">CTR</th></tr></thead><tbody id="wl-video"></tbody></table>
     </div>
     <div class="panel">
-      <div class="panel-title">🔴 Top LIVE Productivity <span class="ptag">Agustus MTD (1–21 Agu) · min. 2 sesi LIVE</span></div>
+      <div class="panel-title">🔴 Top LIVE Productivity <span class="ptag">Agustus Full Month (1–31 Agu) · min. 2 sesi LIVE</span></div>
       <div style="font-size:11px;color:var(--gray500);margin-bottom:10px">GMV per sesi LIVE tertinggi. n kecil (hanya <span id="wl-live-count"></span> creator pernah LIVE ≥2x) — baca sebagai sinyal awal.</div>
       <table class="dt"><thead><tr><th>Creator</th><th class="r">LIVE GMV</th><th class="r">Sesi</th><th class="r">GMV/Sesi</th><th class="r">Followers</th></tr></thead><tbody id="wl-live"></tbody></table>
     </div>
   </div>
 
   <div class="page content" id="page-alerts">
-    <div class="sec"><div class="sec-hdr"><div class="sec-title">🚨 Red Flags — Terbaru (Agustus W3)</div></div><div id="alert-list"></div></div>
+    <div class="sec"><div class="sec-hdr"><div class="sec-title">🚨 Red Flags — Terbaru (Agustus W4)</div></div><div id="alert-list"></div></div>
     <div class="sec" style="margin-top:24px"><div class="sec-hdr"><div class="sec-title">✅ Green Signals</div></div><div id="green-list"></div></div>
     <div class="sec" style="margin-top:24px"><div class="sec-hdr"><div class="sec-title">⚡ Action Items</div></div><div id="action-list"></div></div>
   </div>
@@ -467,7 +467,7 @@ function hydrate(){
     o.gmv_per_day=Math.round(o.gmv/days);
     return o;
   }
-  ['mei','jun','jul_w1','jul_w2','jul_w3','jul_w4','jul','jul_mtd','agu_w1','agu_w2','agu_w3','agu_mtd','jul_1_14_ref','jul_1_21_ref'].forEach(p=>{
+  ['mei','jun','jul_w1','jul_w2','jul_w3','jul_w4','jul','jul_mtd','agu_w1','agu_w2','agu_w3','agu_w4','agu','agu_mtd','jul_1_14_ref','jul_1_21_ref'].forEach(p=>{
     const days=D[p].overview.days;
     D[p].top=D[p].top.map(arr=>rowToObj(arr,days));
   });
@@ -485,11 +485,13 @@ function hydrate(){
   D.comparison_mtd_julw1_aguw1=D.comparison_mtd_julw1_aguw1.map(cmpToObj);
   D.comparison_week_aguw1_aguw2=D.comparison_week_aguw1_aguw2.map(cmpToObj);
   D.comparison_week_aguw2_aguw3=D.comparison_week_aguw2_aguw3.map(cmpToObj);
+  D.comparison_week_aguw3_aguw4=D.comparison_week_aguw3_aguw4.map(cmpToObj);
   D.comparison_mtd_agu=D.comparison_mtd_agu.map(cmpToObj);
+  D.comparison_month_agu_jul=D.comparison_month_agu_jul.map(cmpToObj);
 }
 
 let PM='week'; // current mode: month|week|mtd
-let P='agu_w3'; // current period key
+let P='agu_w4'; // current period key
 let topS='gmv',topD=1,allS='gmv',allD=1,allF='all',cmpS='gmv_delta',cmpD=1,cmpF='all',wkS='gmv',wkD=1,wkF='all';
 const TC={'T3':'#2D6A4F','T2':'#3a7bd5','T1':'#f4a425','T0':'#9ca3af'};
 const TB={'T3':'#d8f3dc','T2':'#ddeeff','T1':'#fef3cd','T0':'#f3f4f6'};
@@ -679,9 +681,9 @@ function renderWeekly(){
 
   // Critical box - shows for latest period when there's an ongoing concern worth surfacing
   const critBox=document.getElementById('crit-box');
-  if(P==='agu_w3'){
+  if(P==='agu_w4'){
     critBox.style.display='flex';
-    critBox.innerHTML=`<div class="crit-ic">🔴</div><div><div class="crit-title">aku_dan_kamu39: Refund Naik Lagi ke 43.4% — Tren Membaik Terputus</div><div class="crit-body">Sempat 4 periode berturut turun (95.3%→55.3%→51.4%→34.3%), tapi sekarang <strong>naik lagi ke 43.4% (Agu W3)</strong>. Ini membalikkan sinyal positif minggu lalu — kemungkinan bukan perbaikan struktural, cuma fluktuasi di sekitar level 35-45%. Waktunya pertimbangkan eskalasi lebih serius daripada terus menunggu tren membaik sendiri.</div></div>`;
+    critBox.innerHTML=`<div class="crit-ic">🟡</div><div><div class="crit-title">aku_dan_kamu39: Refund Turun Lagi ke 27.8%, Tapi Pola Masih Berfluktuasi</div><div class="crit-body">6 periode terakhir: 95.3%→55.3%→51.4%→34.3%→43.4%→<strong>27.8% (Agu W4)</strong>. Ini angka terbaik sejauh ini, tapi polanya naik-turun (bukan garis lurus turun) — masih di atas threshold normal (~10%). Terus monitoring, jangan tutup kasus dulu sampai konsisten di bawah 15-20% beberapa periode berturut.</div></div>`;
   } else {
     critBox.style.display='none';
   }
@@ -873,24 +875,24 @@ function renderWatchlist(){
 
 function renderAlerts(){
   document.getElementById('alert-list').innerHTML=[
-    {cls:'al-r',title:`🔴 aku_dan_kamu39: Refund Naik Lagi ke 43.4%, Tren Membaik Terputus`,body:`Sempat 4 periode turun berturut (95.3%→55.3%→51.4%→34.3%), sekarang <strong>naik lagi ke 43.4%</strong>. Bukan perbaikan struktural — lebih kayak fluktuasi di kisaran 35-45%. Pertimbangkan eskalasi lebih tegas.`},
-    {cls:'al-a',title:`⚠️ jajang00134 Naik +1287% (Rp184rb → Rp2,6Jt) — Pola Sama Kayak Anomali Sebelumnya`,body:`Lonjakan ekstrem ini match persis pola cafadoqila.shop dan abang4340 bulan lalu — keduanya sempat naik ratusan persen lalu crash minggu berikutnya. Jangan buru-buru anggap ini sinyal positif genuine.`},
-    {cls:'al-r',title:`🔴 GMV Bulan Penuh Juli Masih Turun 20.2% vs Juni`,body:`Rp 1.409,0Jt (Jun) → Rp 1.124,0Jt (Jul, 31 hari lengkap). Dampak commission cut awal Juni belum ke-recover sepenuhnya di level bulanan.`},
+    {cls:'al-a',title:`🟡 aku_dan_kamu39: Refund Turun ke 27.8%, Tapi Masih Berfluktuasi`,body:`6 periode terakhir: 95.3%→55.3%→51.4%→34.3%→43.4%→<strong>27.8%</strong>. Angka terbaik sejauh ini, tapi bukan garis lurus turun — sempat naik lagi di W3 sebelum turun lagi. Belum bisa dianggap "selesai" sampai konsisten di bawah 15-20% beberapa periode berturut.`},
+    {cls:'al-r',title:`🔴 GMV Bulan Penuh Juli Masih Turun 20.2% vs Juni`,body:`Rp 1.409,0Jt (Jun) → Rp 1.124,0Jt (Jul). Konteks historis — Agustus jauh lebih baik (lihat Green Signals).`},
   ].map(a=>`<div class="alert ${a.cls}"><div><strong>${a.title}</strong><br>${a.body}</div></div>`).join('');
 
   document.getElementById('green-list').innerHTML=[
-    {cls:'al-b',title:`✔️ abang4340 Terkonfirmasi Anomali — Anjlok -66.7% Setelah Sempat +839.9%`,body:`Minggu lalu saya flag butuh verifikasi. Sekarang terjawab: pola sama kayak cafadoqila.shop — lonjakan sementara, bukan genuine growth. Ini kali ketiga pola ini muncul, jadi udah cukup jadi pattern yang perlu diwaspadai ke depan.`},
-    {cls:'al-g',title:`✅ Shopee MTD Masih Positif +3.0% — Meski Melambat`,body:`Rp492,1Jt (Jul 1-21) → Rp507,1Jt (Agu 1-21). Turun dari +9.0% (saat masih 14 hari) tapi tetap di zona positif. Shopee konsisten lebih resilient dibanding TikTok bulan ini.`},
-    {cls:'al-b',title:`ℹ️ TikTok MTD -5.9% vs -6.5% Minggu Lalu`,body:`Rp745,4Jt (Jul 1-21) → Rp701,3Jt (Agu 1-21). Sedikit membaik dari pembacaan minggu lalu, tapi masih di zona negatif — belum ada tanda recovery kuat di level TikTok.`},
+    {cls:'al-g',title:`✅ Agustus Selesai — TikTok cuma -8.6% vs Juli (Jauh Lebih Baik dari Juli vs Juni)`,body:`Rp1.124,0Jt (Jul, 31 hari) → Rp1.026,8Jt (Agu, 31 hari). Bandingkan sama Juli vs Juni yang -20.2% — penurunan bulan ini jauh lebih moderate. Recovery-nya nyata meski belum penuh.`},
+    {cls:'al-g',title:`✅ Shopee Bulan Penuh Malah NAIK +3.0% vs Juli`,body:`Rp740,98Jt (Jul) → Rp762,87Jt (Agu). Shopee GMV bulanan positif duluan dibanding TikTok — momentum consistently lebih kuat sepanjang Agustus.`},
+    {cls:'al-g',title:`✅ Minggu Terakhir Agustus Nutup dengan Kuat — Retained GMV +52.9% (TikTok), +73.6% (Shopee)`,body:`W3→W4: TikTok Rp196,4Jt→Rp300,3Jt, Shopee Rp113,7Jt→Rp197,4Jt. Kedua platform sama-sama nutup bulan dengan lonjakan kuat — sinyal positif buat momentum masuk September.`},
+    {cls:'al-b',title:`✔️ Koreksi: jajang00134 TIDAK Ikut Pola "Lonjakan Lalu Crash"`,body:`Minggu lalu saya flag creator ini mirip cafadoqila.shop/abang4340 (anomali). Ternyata beda — GMV-nya stabil (Rp2,55Jt→Rp2,41Jt, cuma -5.8%), bukan crash. Bagus buat dicatat: nggak semua lonjakan besar otomatis anomali, tetap perlu tunggu 1 periode konfirmasi sebelum judge.`},
   ].map(a=>`<div class="alert ${a.cls}"><div><strong>${a.title}</strong><br>${a.body}</div></div>`).join('');
 
   document.getElementById('action-list').innerHTML=[
-    {cls:'al-a',title:`⚡ Priority 1: Eskalasi aku_dan_kamu39`,body:`4 minggu monitoring, refund balik naik ke 43%. Waktunya lebih tegas — freeze komisi sementara atau investigasi manual, bukan terus "tunggu minggu depan".`},
-    {cls:'al-b',title:`⚡ Priority 2: Catat Pola "Lonjakan Lalu Crash" Sebagai Playbook`,body:`3 creator (cafadoqila.shop, abang4340, jajang00134) semua nunjukkin pola sama: lonjakan >800% lalu crash. Worth didokumentasikan sebagai red flag pattern standar, biar nggak perlu re-investigasi dari nol tiap kali muncul creator serupa.`},
-    {cls:'al-b',title:`⚡ Priority 3: Gali Kenapa Shopee Lebih Resilient`,body:`Shopee MTD +3.0% vs TikTok MTD -5.9% — gap yang konsisten 2 minggu berturut. Worth investigasi channel/campaign apa yang bikin Shopee lebih stabil.`},
+    {cls:'al-a',title:`⚡ Priority 1: Terus Monitoring aku_dan_kamu39, Jangan Tutup Kasus`,body:`27.8% itu angka terbaik, tapi pola fluktuatif bikin belum bisa dipercaya penuh. Tunggu 2-3 periode lagi konsisten rendah baru bisa dianggap resolved.`},
+    {cls:'al-g',title:`⚡ Priority 2: Bangun Momentum dari Penutupan Kuat Agustus`,body:`Kedua platform nutup bulan dengan lonjakan kuat di W4. Worth digali apa yang beda di minggu terakhir ini (campaign, seasonal, dll) buat direplikasi di awal September.`},
+    {cls:'al-b',title:`⚡ Priority 3: Update Playbook "Lonjakan Ekstrem" dengan Kasus jajang00134`,body:`Sekarang kita punya 2 dari 3 kasus yang crash (cafadoqila.shop, abang4340) dan 1 yang stabil (jajang00134). Playbook-nya perlu direvisi jadi "waspada tapi jangan otomatis judge negatif" — perlu 1 periode konfirmasi dulu.`},
   ].map(a=>`<div class="alert ${a.cls}"><div><strong>${a.title}</strong><br>${a.body}</div></div>`).join('');
 
-  document.getElementById('alert-count').textContent='3';
+  document.getElementById('alert-count').textContent='2';
 }
 
 
