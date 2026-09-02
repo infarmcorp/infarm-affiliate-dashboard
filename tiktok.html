@@ -436,7 +436,7 @@ th.sortable:hover{color:var(--gray800)}
   </div>
 
   <div class="page content" id="page-alerts">
-    <div class="sec"><div class="sec-hdr"><div class="sec-title">🚨 Red Flags — Terbaru (Agustus W4)</div></div><div id="alert-list"></div></div>
+    <div class="sec"><div class="sec-hdr"><div class="sec-title" id="alerts-page-title">🚨 Red Flags</div></div><div id="alert-list"></div></div>
     <div class="sec" style="margin-top:24px"><div class="sec-hdr"><div class="sec-title">✅ Green Signals</div></div><div id="green-list"></div></div>
     <div class="sec" style="margin-top:24px"><div class="sec-hdr"><div class="sec-title">⚡ Action Items</div></div><div id="action-list"></div></div>
   </div>
@@ -679,11 +679,15 @@ function renderWeekly(){
   document.getElementById('trend-title').textContent=`📅 Trend & Insight — ${cfg.label}`;
   document.getElementById('wk-period-label').textContent=cfg.label;
 
-  // Critical box - shows for latest period when there's an ongoing concern worth surfacing
+  // Critical box - dynamically tracks aku_dan_kamu39's refund status for whichever period is selected
   const critBox=document.getElementById('crit-box');
-  if(P==='agu_w4'){
+  const watchedCreator = periodData(P).top.find(c=>c.username==='aku_dan_kamu39');
+  if(watchedCreator && watchedCreator.refund_rate>15){
+    const rr = watchedCreator.refund_rate;
+    const icon = rr>50?'🔴':rr>25?'🟡':'🟢';
+    const statusText = rr>50?'masih tinggi':rr>25?'membaik tapi belum sehat':'mendekati level sehat';
     critBox.style.display='flex';
-    critBox.innerHTML=`<div class="crit-ic">🟡</div><div><div class="crit-title">aku_dan_kamu39: Refund Turun Lagi ke 27.8%, Tapi Pola Masih Berfluktuasi</div><div class="crit-body">6 periode terakhir: 95.3%→55.3%→51.4%→34.3%→43.4%→<strong>27.8% (Agu W4)</strong>. Ini angka terbaik sejauh ini, tapi polanya naik-turun (bukan garis lurus turun) — masih di atas threshold normal (~10%). Terus monitoring, jangan tutup kasus dulu sampai konsisten di bawah 15-20% beberapa periode berturut.</div></div>`;
+    critBox.innerHTML=`<div class="crit-ic">${icon}</div><div><div class="crit-title">aku_dan_kamu39: Refund ${rr}% (${statusText})</div><div class="crit-body">GMV periode ini ${R(watchedCreator.gmv)}, refund rate <strong>${rr}%</strong> — threshold normal ~10%. Ini creator yang udah lama dipantau karena riwayat refund tinggi; cek tab Watchlist/Comparison buat lihat tren lengkapnya.</div></div>`;
   } else {
     critBox.style.display='none';
   }
@@ -874,25 +878,74 @@ function renderWatchlist(){
 }
 
 function renderAlerts(){
-  document.getElementById('alert-list').innerHTML=[
-    {cls:'al-a',title:`🟡 aku_dan_kamu39: Refund Turun ke 27.8%, Tapi Masih Berfluktuasi`,body:`6 periode terakhir: 95.3%→55.3%→51.4%→34.3%→43.4%→<strong>27.8%</strong>. Angka terbaik sejauh ini, tapi bukan garis lurus turun — sempat naik lagi di W3 sebelum turun lagi. Belum bisa dianggap "selesai" sampai konsisten di bawah 15-20% beberapa periode berturut.`},
-    {cls:'al-r',title:`🔴 GMV Bulan Penuh Juli Masih Turun 20.2% vs Juni`,body:`Rp 1.409,0Jt (Jun) → Rp 1.124,0Jt (Jul). Konteks historis — Agustus jauh lebih baik (lihat Green Signals).`},
-  ].map(a=>`<div class="alert ${a.cls}"><div><strong>${a.title}</strong><br>${a.body}</div></div>`).join('');
+  const cur = periodData(P);
+  const ov = cur.overview;
+  const cfg = currentPeriodConfig();
+  const bench = getBenchmark();
+  const cmpData = getComparisonData();
 
-  document.getElementById('green-list').innerHTML=[
-    {cls:'al-g',title:`✅ Agustus Selesai — TikTok cuma -8.6% vs Juli (Jauh Lebih Baik dari Juli vs Juni)`,body:`Rp1.124,0Jt (Jul, 31 hari) → Rp1.026,8Jt (Agu, 31 hari). Bandingkan sama Juli vs Juni yang -20.2% — penurunan bulan ini jauh lebih moderate. Recovery-nya nyata meski belum penuh.`},
-    {cls:'al-g',title:`✅ Shopee Bulan Penuh Malah NAIK +3.0% vs Juli`,body:`Rp740,98Jt (Jul) → Rp762,87Jt (Agu). Shopee GMV bulanan positif duluan dibanding TikTok — momentum consistently lebih kuat sepanjang Agustus.`},
-    {cls:'al-g',title:`✅ Minggu Terakhir Agustus Nutup dengan Kuat — Retained GMV +52.9% (TikTok), +73.6% (Shopee)`,body:`W3→W4: TikTok Rp196,4Jt→Rp300,3Jt, Shopee Rp113,7Jt→Rp197,4Jt. Kedua platform sama-sama nutup bulan dengan lonjakan kuat — sinyal positif buat momentum masuk September.`},
-    {cls:'al-b',title:`✔️ Koreksi: jajang00134 TIDAK Ikut Pola "Lonjakan Lalu Crash"`,body:`Minggu lalu saya flag creator ini mirip cafadoqila.shop/abang4340 (anomali). Ternyata beda — GMV-nya stabil (Rp2,55Jt→Rp2,41Jt, cuma -5.8%), bukan crash. Bagus buat dicatat: nggak semua lonjakan besar otomatis anomali, tetap perlu tunggu 1 periode konfirmasi sebelum judge.`},
-  ].map(a=>`<div class="alert ${a.cls}"><div><strong>${a.title}</strong><br>${a.body}</div></div>`).join('');
+  document.getElementById('alerts-page-title').textContent = `🚨 Red Flags — ${cfg.label}`;
 
-  document.getElementById('action-list').innerHTML=[
-    {cls:'al-a',title:`⚡ Priority 1: Terus Monitoring aku_dan_kamu39, Jangan Tutup Kasus`,body:`27.8% itu angka terbaik, tapi pola fluktuatif bikin belum bisa dipercaya penuh. Tunggu 2-3 periode lagi konsisten rendah baru bisa dianggap resolved.`},
-    {cls:'al-g',title:`⚡ Priority 2: Bangun Momentum dari Penutupan Kuat Agustus`,body:`Kedua platform nutup bulan dengan lonjakan kuat di W4. Worth digali apa yang beda di minggu terakhir ini (campaign, seasonal, dll) buat direplikasi di awal September.`},
-    {cls:'al-b',title:`⚡ Priority 3: Update Playbook "Lonjakan Ekstrem" dengan Kasus jajang00134`,body:`Sekarang kita punya 2 dari 3 kasus yang crash (cafadoqila.shop, abang4340) dan 1 yang stabil (jajang00134). Playbook-nya perlu direvisi jadi "waspada tapi jangan otomatis judge negatif" — perlu 1 periode konfirmasi dulu.`},
-  ].map(a=>`<div class="alert ${a.cls}"><div><strong>${a.title}</strong><br>${a.body}</div></div>`).join('');
+  const red = [], green = [], actions = [];
 
-  document.getElementById('alert-count').textContent='2';
+  // RULE: individual creators with unhealthy refund rate this period
+  const highRefund = cur.top.filter(c=>c.gmv>500000 && c.refund_rate>25).sort((a,b)=>b.refund_rate-a.refund_rate).slice(0,3);
+  highRefund.forEach(c=>{
+    red.push({cls:'al-r',title:`🔴 ${c.display}: Refund ${c.refund_rate}%`,body:`GMV ${R(c.gmv)} periode ini, refund rate jauh di atas normal (~10%). Kalau ini creator lama, cek tren beberapa periode terakhir buat lihat arahnya membaik atau memburuk.`});
+  });
+
+  // RULE: overall GMV trend vs benchmark (skip prorated estimates, misleading)
+  if(bench.available && !bench.estimate){
+    const d = pct(ov.total_gmv, bench.overview.total_gmv);
+    if(d<=-15) red.push({cls:'al-r',title:`🔴 GMV Turun ${Math.abs(d)}% vs ${bench.label}`,body:`${R(bench.overview.total_gmv)} → ${R(ov.total_gmv)}.`});
+    else if(d>=15) green.push({cls:'al-g',title:`✅ GMV Naik ${d}% vs ${bench.label}`,body:`${R(bench.overview.total_gmv)} → ${R(ov.total_gmv)}.`});
+    // refund rate trend
+    const rd = ov.refund_rate - bench.overview.refund_rate;
+    if(rd<=-3) green.push({cls:'al-g',title:`✅ Refund Rate Membaik ${Math.abs(rd).toFixed(1)}pp`,body:`${bench.overview.refund_rate}% → ${ov.refund_rate}% vs ${bench.label}.`});
+    else if(rd>=3) red.push({cls:'al-a',title:`⚠️ Refund Rate Memburuk ${rd.toFixed(1)}pp`,body:`${bench.overview.refund_rate}% → ${ov.refund_rate}% vs ${bench.label}.`});
+  }
+
+  if(cmpData){
+    const retained = cmpData.filter(c=>c.gmv_a>0 && c.gmv_b>0);
+
+    const sharpDecliners = retained.filter(c=>pct(c.gmv_b,c.gmv_a)<=-40).sort((a,b)=>a.gmv_delta-b.gmv_delta).slice(0,3);
+    sharpDecliners.forEach(c=>{
+      red.push({cls:'al-a',title:`⚠️ ${c.display} Turun ${pct(c.gmv_b,c.gmv_a)}%`,body:`${R(c.gmv_a)} → ${R(c.gmv_b)} vs ${bench.label}.`});
+    });
+
+    const extremeGrowth = retained.filter(c=>pct(c.gmv_b,c.gmv_a)>=200).sort((a,b)=>b.gmv_delta-a.gmv_delta).slice(0,2);
+    extremeGrowth.forEach(c=>{
+      red.push({cls:'al-a',title:`⚠️ ${c.display} Naik +${pct(c.gmv_b,c.gmv_a)}% — Perlu Verifikasi`,body:`${R(c.gmv_a)} → ${R(c.gmv_b)}. Lonjakan seekstrem ini biasanya butuh 1 periode konfirmasi sebelum dianggap genuine growth (bukan otomatis anomali, tapi juga jangan langsung dipercaya).`});
+    });
+
+    const newHighValue = cmpData.filter(c=>c.gmv_a===0 && c.gmv_b>5000000).sort((a,b)=>b.gmv_b-a.gmv_b).slice(0,2);
+    newHighValue.forEach(c=>{
+      green.push({cls:'al-g',title:`✅ Creator Baru: ${c.display} — ${R(c.gmv_b)}`,body:`Langsung tembus GMV tinggi di periode pertama. Worth di-follow-up buat retention.`});
+    });
+
+    const lostHighValue = cmpData.filter(c=>c.gmv_b===0 && c.gmv_a>5000000).sort((a,b)=>b.gmv_a-a.gmv_a).slice(0,2);
+    lostHighValue.forEach(c=>{
+      red.push({cls:'al-r',title:`🔴 ${c.display} Churn — Sebelumnya ${R(c.gmv_a)}`,body:`Creator bernilai tinggi ini GMV-nya 0 periode ini. Worth di-reach-out sebelum makin lama nggak aktif.`});
+    });
+
+    const topGrower = retained.filter(c=>c.gmv_delta>0).sort((a,b)=>b.gmv_delta-a.gmv_delta)[0];
+    if(topGrower && pct(topGrower.gmv_b,topGrower.gmv_a)<200){
+      green.push({cls:'al-b',title:`ℹ️ Top Grower: ${topGrower.display} +${pct(topGrower.gmv_b,topGrower.gmv_a)}%`,body:`${R(topGrower.gmv_a)} → ${R(topGrower.gmv_b)} vs ${bench.label}.`});
+    }
+  }
+
+  if(red.length===0) red.push({cls:'al-g',title:'✅ Tidak Ada Red Flag Terdeteksi',body:`Nggak ada creator/metrik yang match kriteria alert otomatis buat periode ${cfg.label}.`});
+  if(green.length===0) green.push({cls:'al-b',title:'ℹ️ Belum Ada Sinyal Positif Menonjol',body:`Nggak ada pencapaian signifikan yang match kriteria buat periode ${cfg.label}.`});
+
+  if(highRefund.length) actions.push({cls:'al-a',title:'⚡ Investigasi Creator Refund Tinggi',body:'Cek daftar di atas — kalau ada yang udah berulang beberapa periode, pertimbangkan eskalasi (freeze komisi/investigasi manual).'});
+  if(cmpData && cmpData.filter(c=>c.gmv_a>0&&c.gmv_b>0&&pct(c.gmv_b,c.gmv_a)>=200).length) actions.push({cls:'al-b',title:'⚡ Verifikasi Lonjakan Ekstrem',body:'Cek konten/campaign spesifik creator yang naik >200% sebelum dianggap sinyal positif genuine — tunggu 1 periode konfirmasi.'});
+  if(cmpData && cmpData.filter(c=>c.gmv_b===0&&c.gmv_a>5000000).length) actions.push({cls:'al-b',title:'⚡ Follow-up Creator Churn Bernilai Tinggi',body:'Reach out ke creator yang sebelumnya kontribusi besar tapi sekarang GMV 0.'});
+  if(actions.length===0) actions.push({cls:'al-b',title:'ℹ️ Nggak Ada Action Item Mendesak',body:`Berdasarkan kriteria otomatis, periode ${cfg.label} nggak nunjukkin hal yang butuh tindakan segera.`});
+
+  document.getElementById('alert-list').innerHTML = red.map(a=>`<div class="alert ${a.cls}"><div><strong>${a.title}</strong><br>${a.body}</div></div>`).join('');
+  document.getElementById('green-list').innerHTML = green.map(a=>`<div class="alert ${a.cls}"><div><strong>${a.title}</strong><br>${a.body}</div></div>`).join('');
+  document.getElementById('action-list').innerHTML = actions.map(a=>`<div class="alert ${a.cls}"><div><strong>${a.title}</strong><br>${a.body}</div></div>`).join('');
+  document.getElementById('alert-count').textContent = red.length;
 }
 
 
