@@ -275,7 +275,7 @@ body{background:#f0f2f0}
 let D;
 let SHD;
 let CPM='week'; // currently selected Combined mode
-let CP='agu_w4'; // currently selected Combined Overview period
+let CP='sep_w1'; // currently selected Combined Overview period
 const TC={'T3':'#2D6A4F','T2':'#3a7bd5','T1':'#f4a425','T0':'#9ca3af'};
 const TB={'T3':'#d8f3dc','T2':'#ddeeff','T1':'#fef3cd','T0':'#f3f4f6'};
 const TL={'T3':'Elite','T2':'Aktif','T1':'Berkembang','T0':'Long-tail'};
@@ -287,6 +287,7 @@ function ini(s){const w=(s||'X').replace(/[^a-z]/gi,' ').trim().split(' ');retur
 // Only periods present in BOTH D (TikTok) and SHD.periods (Shopee) are eligible here.
 const COMBINED_MODES = {
   week: [
+    {key:'sep_w1', label:'September W1 (1–7 Sep)'},
     {key:'agu_w4', label:'Agustus W4 (22–31 Agu)'},
     {key:'agu_w3', label:'Agustus W3 (15–21 Agu)'},
     {key:'agu_w2', label:'Agustus W2 (8–14 Agu)'},
@@ -302,7 +303,7 @@ const COMBINED_MODES = {
     {key:'jun', label:'Juni 2026'},
   ],
   mtd: [
-    {key:'agu_mtd', label:'Agustus (Full Month, 1–31 Agu)'},
+    {key:'sep_w1', label:'September MTD (1–7 Sep)'},
   ],
 };
 
