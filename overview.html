@@ -358,12 +358,35 @@ function renderCombined(){
   const ttShare = ttOv.total_gmv/combinedGmv*100;
   const shShare = shOv.total_gmv/combinedGmv*100;
 
+  // Look up benchmark (previous period) for both platforms to compute combined delta
+  const ttCfg = D.modes[CPM] && D.modes[CPM].periods.find(p=>p.key===CP);
+  const shCfg = SHD.modes[CPM] && SHD.modes[CPM].periods.find(p=>p.key===CP);
+  let deltaHtml = {gmv:'', orders:'', comm:''};
+  let benchLabel = '';
+  if(ttCfg && ttCfg.prevKey && D[ttCfg.prevKey] && shCfg && shCfg.prevKey && SHD.periods[shCfg.prevKey]){
+    const prevTtOv = D[ttCfg.prevKey].overview;
+    const prevShOv = SHD.periods[shCfg.prevKey].overview;
+    const prevGmv = prevTtOv.total_gmv + prevShOv.total_gmv;
+    const prevOrders = prevTtOv.total_orders + prevShOv.total_orders;
+    const prevComm = prevTtOv.commission + prevShOv.total_commission;
+    benchLabel = ttCfg.prevLabel;
+    const mkDelta = (cur,prev) => {
+      const d = pct(cur,prev);
+      const cls = d>0?'hd-up':d<0?'hd-down':'';
+      const arrow = d>0?'▲':d<0?'▼':'—';
+      return d===0 ? '' : `<span class="hk-delta ${cls}">${arrow} ${Math.abs(d)}%</span>`;
+    };
+    deltaHtml.gmv = mkDelta(combinedGmv, prevGmv);
+    deltaHtml.orders = mkDelta(combinedOrders, prevOrders);
+    deltaHtml.comm = mkDelta(combinedComm, prevComm);
+  }
+
   document.getElementById('combined-period-label').textContent = cpLabel + ' · Major metrics saja, bukan detail';
 
   document.getElementById('combined-hero').innerHTML = `
-    <div class="ch-hero"><div class="ch-hero-label">GMV Gabungan</div><div class="ch-hero-val">${R(combinedGmv)}</div><div class="ch-hero-sub">TikTok + Shopee, additive</div></div>
-    <div class="ch-hero"><div class="ch-hero-label">Orders Gabungan</div><div class="ch-hero-val">${N(combinedOrders)}</div><div class="ch-hero-sub">TikTok + Shopee, additive</div></div>
-    <div class="ch-hero"><div class="ch-hero-label">Commission Gabungan</div><div class="ch-hero-val">${R(combinedComm)}</div><div class="ch-hero-sub">TikTok + Shopee, additive</div></div>
+    <div class="ch-hero"><div class="ch-hero-label">GMV Gabungan</div><div class="ch-hero-val">${R(combinedGmv)}</div>${deltaHtml.gmv}<div class="ch-hero-sub">TikTok + Shopee, additive${benchLabel?' · vs '+benchLabel:''}</div></div>
+    <div class="ch-hero"><div class="ch-hero-label">Orders Gabungan</div><div class="ch-hero-val">${N(combinedOrders)}</div>${deltaHtml.orders}<div class="ch-hero-sub">TikTok + Shopee, additive</div></div>
+    <div class="ch-hero"><div class="ch-hero-label">Commission Gabungan</div><div class="ch-hero-val">${R(combinedComm)}</div>${deltaHtml.comm}<div class="ch-hero-sub">TikTok + Shopee, additive</div></div>
   `;
 
   document.getElementById('combined-split').innerHTML = `
