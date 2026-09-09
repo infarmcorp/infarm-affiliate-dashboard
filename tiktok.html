@@ -378,7 +378,10 @@ th.sortable:hover{color:var(--gray800)}
 
   <div class="page content" id="page-comparison">
     <div id="cmp-available">
-      <div class="search-wrap"><span class="search-ic">🔍</span><input type="text" class="search-input" id="cmpSearchInput" placeholder="Cari username/nama creator..." oninput="onCmpSearch(this.value)"></div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px">
+        <div class="search-wrap" style="margin-bottom:0;flex:1;min-width:200px"><span class="search-ic">🔍</span><input type="text" class="search-input" id="cmpSearchInput" placeholder="Cari username/nama creator..." oninput="onCmpSearch(this.value)"></div>
+        <button class="btn" onclick="exportComparison()">⬇️ Export CSV</button>
+      </div>
       <div class="ftabs" id="cmp-filter-tabs">
         <div class="ftab active" data-filter="all" onclick="fCmp('all',this)">Semua</div>
         <div class="ftab" data-filter="retained" onclick="fCmp('retained',this)">🔄 Retained</div>
@@ -414,22 +417,22 @@ th.sortable:hover{color:var(--gray800)}
       </div>
     </div>
     <div class="panel" style="margin-bottom:16px">
-      <div class="panel-title">🚀 Top Growers <span class="ptag">Agu W4 → Sep W1, retained creators</span></div>
+      <div class="panel-title" style="display:flex;justify-content:space-between;align-items:center">🚀 Top Growers <span class="ptag">Agu W4 → Sep W1, retained creators</span><button class="btn" style="padding:4px 10px;font-size:11px" onclick="exportWatchlist('growers')">⬇️ Export</button></div>
       <div style="font-size:11px;color:var(--gray500);margin-bottom:10px">Creator aktif di Agu W4 dan Sep W1 dengan kenaikan GMV absolut terbesar. ⚠️ Durasi beda (10 hari vs 7 hari), sebagian kenaikan bisa efek durasi.</div>
       <table class="dt"><thead><tr><th>Creator</th><th class="r">GMV Agu W4</th><th class="r">GMV Sep W1</th><th class="r">Growth</th><th class="r">Followers</th></tr></thead><tbody id="wl-growers"></tbody></table>
     </div>
     <div class="panel" style="margin-bottom:16px">
-      <div class="panel-title">📉 Sharpest Decliners <span class="ptag">Agu W4 → Sep W1, retained creators</span></div>
+      <div class="panel-title" style="display:flex;justify-content:space-between;align-items:center">📉 Sharpest Decliners <span class="ptag">Agu W4 → Sep W1, retained creators</span><button class="btn" style="padding:4px 10px;font-size:11px" onclick="exportWatchlist('decliners')">⬇️ Export</button></div>
       <div style="font-size:11px;color:var(--gray500);margin-bottom:10px">Creator aktif di Agu W4 dan Sep W1 dengan penurunan GMV absolut terbesar.</div>
       <table class="dt"><thead><tr><th>Creator</th><th class="r">GMV Agu W4</th><th class="r">GMV Sep W1</th><th class="r">Decline</th><th class="r">Refund Sep W1</th></tr></thead><tbody id="wl-decliners"></tbody></table>
     </div>
     <div class="panel" style="margin-bottom:16px">
-      <div class="panel-title">🎥 Top Video Productivity <span class="ptag">Agustus Full Month (1–31 Agu) · min. 4 video</span></div>
+      <div class="panel-title" style="display:flex;justify-content:space-between;align-items:center">🎥 Top Video Productivity <span class="ptag">Agustus Full Month (1–31 Agu) · min. 4 video</span><button class="btn" style="padding:4px 10px;font-size:11px" onclick="exportWatchlist('video')">⬇️ Export</button></div>
       <div style="font-size:11px;color:var(--gray500);margin-bottom:10px">GMV per video tertinggi — konten paling efisien.</div>
       <table class="dt"><thead><tr><th>Creator</th><th class="r">GMV Total</th><th class="r">Videos</th><th class="r">GMV/Video</th><th class="r">CTR</th></tr></thead><tbody id="wl-video"></tbody></table>
     </div>
     <div class="panel">
-      <div class="panel-title">🔴 Top LIVE Productivity <span class="ptag">Agustus Full Month (1–31 Agu) · min. 2 sesi LIVE</span></div>
+      <div class="panel-title" style="display:flex;justify-content:space-between;align-items:center">🔴 Top LIVE Productivity <span class="ptag">Agustus Full Month (1–31 Agu) · min. 2 sesi LIVE</span><button class="btn" style="padding:4px 10px;font-size:11px" onclick="exportWatchlist('live')">⬇️ Export</button></div>
       <div style="font-size:11px;color:var(--gray500);margin-bottom:10px">GMV per sesi LIVE tertinggi. n kecil (hanya <span id="wl-live-count"></span> creator pernah LIVE ≥2x) — baca sebagai sinyal awal.</div>
       <table class="dt"><thead><tr><th>Creator</th><th class="r">LIVE GMV</th><th class="r">Sesi</th><th class="r">GMV/Sesi</th><th class="r">Followers</th></tr></thead><tbody id="wl-live"></tbody></table>
     </div>
@@ -823,6 +826,53 @@ function renderComparison(){
   }).join('')||`<tr><td colspan="8" class="empty">Tidak ada data</td></tr>`;
 }
 function fCmp(f,el){cmpF=f;document.querySelectorAll('#cmp-filter-tabs .ftab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderComparison()}
+
+function downloadCSV(filename, headers, rows){
+  const esc = v => { const s = v===null||v===undefined?'':String(v); return /[",\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s; };
+  const csv = [headers.map(esc).join(','), ...rows.map(r=>r.map(esc).join(','))].join('\r\n');
+  const blob = new Blob(['\ufeff'+csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url), 1000);
+}
+
+function exportComparison(){
+  const cfg = currentPeriodConfig();
+  let data = getComparisonData() || [];
+  if(cmpF==='retained') data=data.filter(c=>c.gmv_a>0&&c.gmv_b>0);
+  else if(cmpF==='up') data=data.filter(c=>c.gmv_delta>0&&c.gmv_a>0);
+  else if(cmpF==='down') data=data.filter(c=>c.gmv_delta<0&&c.gmv_a>0);
+  else if(cmpF==='new') data=data.filter(c=>c.gmv_a===0&&c.gmv_b>0);
+  else if(cmpF==='churn') data=data.filter(c=>c.gmv_b===0&&c.gmv_a>0);
+  if(cmpSearchQuery) data=data.filter(c=>c.display.toLowerCase().includes(cmpSearchQuery)||c.username.toLowerCase().includes(cmpSearchQuery));
+  data = [...data].sort((a,b)=>{const av=a[cmpS],bv=b[cmpS];if(typeof av==='string')return cmpD*av.localeCompare(bv);return cmpD*((bv||0)-(av||0));});
+
+  const headers = ['Username','Nama',`GMV (${cfg.prevLabel})`,`GMV (${cfg.label})`,'Delta GMV (Rp)','Delta %','Tier Sebelum','Tier Sesudah','Orders Sebelum','Orders Sesudah','Status'];
+  const rows = data.map(c=>[c.username, c.display, c.gmv_a, c.gmv_b, c.gmv_delta, c.gmv_a>0?pct(c.gmv_b,c.gmv_a)+'%':'N/A', c.tier_a, c.tier_b, c.orders_a, c.orders_b, c.status]);
+  downloadCSV(`comparison_${cfg.key}_${cmpF}.csv`, headers, rows);
+}
+
+function exportWatchlist(section){
+  const W = D.watchlist;
+  let headers, rows, filename;
+  if(section==='growers' || section==='decliners'){
+    const list = W[section==='growers'?'top_growers':'top_decliners'];
+    headers = ['Username','Nama','GMV Sebelum','GMV Sesudah','Delta %','Tier Sebelum','Tier Sesudah','Followers'];
+    rows = list.map(c=>[c.username,c.display,c.gmv_a,c.gmv_b,(section==='growers'?c.growth_pct:c.decline_pct)+'%',c.tier_a,c.tier_b,c.followers]);
+    filename = `watchlist_${section}_${P}.csv`;
+  } else if(section==='video'){
+    headers = ['Username','Nama','GMV Total','Videos','GMV per Video','CTR'];
+    rows = W.video_productivity.map(c=>[c.username,c.display,c.gmv,c.videos,c.gmv_per_video,c.ctr+'%']);
+    filename = `watchlist_video_productivity_${P}.csv`;
+  } else if(section==='live'){
+    headers = ['Username','Nama','LIVE GMV','Sesi','GMV per Sesi','Followers'];
+    rows = W.live_productivity.map(c=>[c.username,c.display,c.live_gmv,c.lives,c.gmv_per_live,c.followers]);
+    filename = `watchlist_live_productivity_${P}.csv`;
+  }
+  downloadCSV(filename, headers, rows);
+}
 function sCmp(f){if(cmpS===f)cmpD*=-1;else{cmpS=f;cmpD=1}renderComparison()}
 function jumpToCreatorList(filter){
   showPage('comparison');
