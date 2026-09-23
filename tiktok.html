@@ -260,7 +260,7 @@ th.sortable:hover{color:var(--gray800)}
     <button class="nav-btn" onclick="showPage('alerts')"><span class="nav-ic">🚨</span>Red Flags <span style="margin-left:auto;background:var(--red);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:999px" id="alert-count">5</span></button>
   </nav>
   <div class="sb-foot">
-    <div class="sb-note">Sumber: TikTok Seller Center<br>Folder: Infarm KOL Data<br>Update: 16 September 2026</div>
+    <div class="sb-note">Sumber: TikTok Seller Center<br>Folder: Infarm KOL Data<br>Update: 23 September 2026</div>
   </div>
 </aside>
 <main class="main">
@@ -413,18 +413,18 @@ th.sortable:hover{color:var(--gray800)}
     <div class="insight-box">
       <div class="ib-title">⭐ Watchlist — Rekomendasi Berbasis Performa</div>
       <div style="font-size:12px;color:rgba(255,255,255,.75);line-height:1.6">
-        4 daftar otomatis. <strong>Growers & Decliners</strong> selalu pakai transisi minggu terakhir yang tersedia (Sep W1→W2), terlepas dari Mode/Period yang kamu pilih di atas. <strong>Video & LIVE Productivity</strong> pakai Agustus Full Month (1–31 Agu) — di-refresh tiap update biar nggak ketinggalan, sample lebih besar dari 1 minggu doang.
+        4 daftar otomatis. <strong>Growers & Decliners</strong> selalu pakai transisi minggu terakhir yang tersedia (Sep W2→W3), terlepas dari Mode/Period yang kamu pilih di atas. <strong>Video & LIVE Productivity</strong> pakai Agustus Full Month (1–31 Agu) — di-refresh tiap update biar nggak ketinggalan, sample lebih besar dari 1 minggu doang.
       </div>
     </div>
     <div class="panel" style="margin-bottom:16px">
-      <div class="panel-title" style="display:flex;justify-content:space-between;align-items:center">🚀 Top Growers <span class="ptag">Sep W1 → W2, retained creators</span><button class="btn" style="padding:4px 10px;font-size:11px" onclick="exportWatchlist('growers')">⬇️ Export</button></div>
-      <div style="font-size:11px;color:var(--gray500);margin-bottom:10px">Creator aktif di Sep W1 dan W2 dengan kenaikan GMV absolut terbesar. Durasi kedua periode sama (7 hari), jadi fair comparison.</div>
-      <table class="dt"><thead><tr><th>Creator</th><th class="r">GMV Sep W1</th><th class="r">GMV Sep W2</th><th class="r">Growth</th><th class="r">Followers</th></tr></thead><tbody id="wl-growers"></tbody></table>
+      <div class="panel-title" style="display:flex;justify-content:space-between;align-items:center">🚀 Top Growers <span class="ptag">Sep W2 → W3, retained creators</span><button class="btn" style="padding:4px 10px;font-size:11px" onclick="exportWatchlist('growers')">⬇️ Export</button></div>
+      <div style="font-size:11px;color:var(--gray500);margin-bottom:10px">Creator aktif di Sep W2 dan W3 dengan kenaikan GMV absolut terbesar. Durasi kedua periode sama (7 hari), jadi fair comparison.</div>
+      <table class="dt"><thead><tr><th>Creator</th><th class="r">GMV Sep W2</th><th class="r">GMV Sep W3</th><th class="r">Growth</th><th class="r">Followers</th></tr></thead><tbody id="wl-growers"></tbody></table>
     </div>
     <div class="panel" style="margin-bottom:16px">
-      <div class="panel-title" style="display:flex;justify-content:space-between;align-items:center">📉 Sharpest Decliners <span class="ptag">Sep W1 → W2, retained creators</span><button class="btn" style="padding:4px 10px;font-size:11px" onclick="exportWatchlist('decliners')">⬇️ Export</button></div>
-      <div style="font-size:11px;color:var(--gray500);margin-bottom:10px">Creator aktif di Sep W1 dan W2 dengan penurunan GMV absolut terbesar.</div>
-      <table class="dt"><thead><tr><th>Creator</th><th class="r">GMV Sep W1</th><th class="r">GMV Sep W2</th><th class="r">Decline</th><th class="r">Refund Sep W2</th></tr></thead><tbody id="wl-decliners"></tbody></table>
+      <div class="panel-title" style="display:flex;justify-content:space-between;align-items:center">📉 Sharpest Decliners <span class="ptag">Sep W2 → W3, retained creators</span><button class="btn" style="padding:4px 10px;font-size:11px" onclick="exportWatchlist('decliners')">⬇️ Export</button></div>
+      <div style="font-size:11px;color:var(--gray500);margin-bottom:10px">Creator aktif di Sep W2 dan W3 dengan penurunan GMV absolut terbesar.</div>
+      <table class="dt"><thead><tr><th>Creator</th><th class="r">GMV Sep W2</th><th class="r">GMV Sep W3</th><th class="r">Decline</th><th class="r">Refund Sep W3</th></tr></thead><tbody id="wl-decliners"></tbody></table>
     </div>
     <div class="panel" style="margin-bottom:16px">
       <div class="panel-title" style="display:flex;justify-content:space-between;align-items:center">🎥 Top Video Productivity <span class="ptag">Agustus Full Month (1–31 Agu) · min. 4 video</span><button class="btn" style="padding:4px 10px;font-size:11px" onclick="exportWatchlist('video')">⬇️ Export</button></div>
@@ -470,7 +470,7 @@ function hydrate(){
     o.gmv_per_day=Math.round(o.gmv/days);
     return o;
   }
-  ['mei','jun','jul_w1','jul_w2','jul_w3','jul_w4','jul','jul_mtd','agu_w1','agu_w2','agu_w3','agu_w4','agu','agu_mtd','jul_1_14_ref','jul_1_21_ref','sep_w1','sep_w2','sep_mtd','agu_1_14_ref'].forEach(p=>{
+  ['mei','jun','jul_w1','jul_w2','jul_w3','jul_w4','jul','jul_mtd','agu_w1','agu_w2','agu_w3','agu_w4','agu','agu_mtd','jul_1_14_ref','jul_1_21_ref','sep_w1','sep_w2','sep_w3','sep_mtd','agu_1_14_ref','agu_1_21_ref'].forEach(p=>{
     const days=D[p].overview.days;
     D[p].top=D[p].top.map(arr=>rowToObj(arr,days));
   });
@@ -491,14 +491,16 @@ function hydrate(){
   D.comparison_week_aguw3_aguw4=D.comparison_week_aguw3_aguw4.map(cmpToObj);
   D.comparison_week_aguw4_sepw1=D.comparison_week_aguw4_sepw1.map(cmpToObj);
   D.comparison_week_sepw1_sepw2=D.comparison_week_sepw1_sepw2.map(cmpToObj);
+  D.comparison_week_sepw2_sepw3=D.comparison_week_sepw2_sepw3.map(cmpToObj);
   D.comparison_mtd_sep=D.comparison_mtd_sep.map(cmpToObj);
   D.comparison_mtd_sep2=D.comparison_mtd_sep2.map(cmpToObj);
+  D.comparison_mtd_sep3=D.comparison_mtd_sep3.map(cmpToObj);
   D.comparison_mtd_agu=D.comparison_mtd_agu.map(cmpToObj);
   D.comparison_month_agu_jul=D.comparison_month_agu_jul.map(cmpToObj);
 }
 
 let PM='week'; // current mode: month|week|mtd
-let P='sep_w2'; // current period key
+let P='sep_w3'; // current period key
 let topS='gmv',topD=1,allS='gmv',allD=1,allF='all',cmpS='gmv_delta',cmpD=1,cmpF='all',wkS='gmv',wkD=1,wkF='all';
 const TC={'T3':'#2D6A4F','T2':'#3a7bd5','T1':'#f4a425','T0':'#9ca3af'};
 const TB={'T3':'#d8f3dc','T2':'#ddeeff','T1':'#fef3cd','T0':'#f3f4f6'};
