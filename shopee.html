@@ -252,11 +252,12 @@ th.sortable:hover{color:var(--gray800)}
     <div class="sb-grp">Dashboard</div>
     <button class="nav-btn active"><span class="nav-ic">📊</span>Overview</button>
   </nav>
-  <div class="sb-foot"><div class="sb-note">Sumber: Shopee Affiliate Portal<br>Folder: Infarm KOL Data _ Shopee<br>Update: 23 September 2026</div></div>
+  <div class="sb-foot"><div class="sb-note">Sumber: Shopee Affiliate Portal<br>Folder: Infarm KOL Data _ Shopee<br>Update: 02 Oktober 2026</div></div>
 </aside>
 <main class="main">
   <div class="topbar">
-    <div><div class="tb-title">Overview — Shopee Affiliate</div><div class="tb-meta" id="shTbMeta">Benchmark otomatis mengikuti mode yang dipilih</div></div>
+    <div><div class="tb-title">Overview — Shopee Affiliate</div><div class="tb-meta" id="shTbMeta">Benchmark otomatis mengikuti mode yang dipilih</div>
+      <div id="sh-duration-warn" style="display:none;background:#fff3cd;color:#664d03;padding:8px 14px;border-radius:8px;font-size:12px;margin-top:8px;font-weight:600"></div></div>
     <div class="tb-right">
       <div class="mode-dropdown-wrap">
         <select class="mode-sel" id="shModeSel" onchange="onShModeChange(this.value)">
@@ -348,7 +349,7 @@ async function loadDataAndInit(){
 const SH_CH_ICON={'Facebook':'📘','Instagram':'📷','Shopee Video':'📹','Shopee Live':'🔴','TikTok':'🎵','YouTube':'▶️','Twitter':'🐦','Others':'❓'};
 let shSortKey='gmv', shSortDir=1;
 let SHPM='week'; // currently selected Shopee mode
-let SHP='sep_w3'; // currently selected Shopee period
+let SHP='sep_w4'; // currently selected Shopee period
 
 function shCurrentPeriodConfig(){
   return SHD.modes[SHPM].periods.find(p=>p.key===SHP);
@@ -389,6 +390,9 @@ function renderShopeeOverview(){
   const T = P.tiers;
 
   document.getElementById('shTbMeta').textContent = cfg.hasComparison ? `Benchmark: ${cfg.prevLabel}${cfg.sameMonth?' 📅 periode sama bulan lalu':' ⏮️ minggu sebelumnya'}` : 'Periode pertama dalam data — belum ada pembanding';
+  const shdw=document.getElementById('sh-duration-warn');
+  if(cfg.durationMismatch){shdw.style.display='block';shdw.textContent=`⚠️ Periode ini durasinya beda sama pembanding (${cfg.label} vs ${cfg.prevLabel}). Delta % di atas BISA over-state karena jumlah hari nggak sama. Growers/Decliners di Watchlist pakai basis bulan penuh, bukan transisi minggu ini.`}
+  else{shdw.style.display='none'}
 
   const bench = cfg.hasComparison ? SHD.periods[cfg.prevKey].overview : null;
   function shDelta(cur,prev){
