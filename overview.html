@@ -287,7 +287,7 @@ function ini(s){const w=(s||'X').replace(/[^a-z]/gi,' ').trim().split(' ');retur
 // Only periods present in BOTH D (TikTok) and SHD.periods (Shopee) are eligible here.
 const COMBINED_MODES = {
   week: [
-    {key:'sep_w4', label:'September W4 (22–30 Sep, 9 hari)', durationMismatch:true},
+    {key:'sep_w4', label:'September W4 (22–30 Sep, 9 hari)'},
     {key:'sep_w3', label:'September W3 (15–21 Sep)'},
     {key:'sep_w2', label:'September W2 (8–14 Sep)'},
     {key:'sep_w1', label:'September W1 (1–7 Sep)'},
@@ -385,8 +385,7 @@ function renderCombined(){
     deltaHtml.comm = mkDelta(combinedComm, prevComm);
   }
 
-  const cpCfg = COMBINED_MODES[CPM].find(p=>p.key===CP);
-  document.getElementById('combined-period-label').textContent = cpLabel + ' · Major metrics saja, bukan detail' + (cpCfg && cpCfg.durationMismatch ? ' ⚠️ durasi beda sama pembanding, delta bisa over-state' : '');
+  document.getElementById('combined-period-label').textContent = cpLabel + ' · Major metrics saja, bukan detail';
 
   document.getElementById('combined-hero').innerHTML = `
     <div class="ch-hero"><div class="ch-hero-label">GMV Gabungan</div><div class="ch-hero-val">${R(combinedGmv)}</div>${deltaHtml.gmv}<div class="ch-hero-sub">TikTok + Shopee, additive${benchLabel?' · vs '+benchLabel:''}</div></div>

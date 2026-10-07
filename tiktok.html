@@ -268,7 +268,6 @@ th.sortable:hover{color:var(--gray800)}
     <div>
       <div class="tb-title" id="tbTitle">Overview — Affiliate Channel</div>
       <div class="tb-meta benchmark-note" id="tbMeta">Benchmark otomatis mengikuti mode yang dipilih</div>
-      <div id="duration-warn" style="display:none;background:#fff3cd;color:#664d03;padding:8px 14px;border-radius:8px;font-size:12px;margin-top:8px;font-weight:600"></div>
     </div>
     <div class="tb-right">
       <div class="mode-dropdown-wrap">
@@ -570,9 +569,6 @@ function renderAll(){
   document.getElementById('tbTitle').textContent=`Overview — ${cfg.label}`;
   const bench=getBenchmark();
   document.getElementById('tbMeta').textContent=bench.available?`Benchmark: ${bench.label}${bench.estimate?' (estimasi)':''}${bench.sameMonth?' 📅 periode sama bulan lalu':bench.available&&!bench.estimate?' ⏮️ minggu sebelumnya':''}`:'Tidak ada benchmark pembanding untuk periode ini';
-  const dw=document.getElementById('duration-warn');
-  if(cfg.durationMismatch){dw.style.display='block';dw.textContent=`⚠️ Periode ini durasinya beda sama pembanding (${cfg.label} vs ${cfg.prevLabel}). Delta % di atas BISA over-state karena jumlah hari nggak sama — jangan dipakai buat klaim "growth". Growers/Decliners di Watchlist pakai basis bulan penuh (durasi hampir sama), bukan transisi minggu ini.`}
-  else{dw.style.display='none'}
   renderHero();renderSecKPIs();renderTop();renderTierDonut();renderGMVSource();renderChannelKPI();
   renderAllCreators();renderAlerts();renderTier();renderWeekly();renderComparison();renderWatchlist();
 }
