@@ -470,7 +470,7 @@ function hydrate(){
     o.gmv_per_day=Math.round(o.gmv/days);
     return o;
   }
-  ['mei','jun','jul_w1','jul_w2','jul_w3','jul_w4','jul','jul_mtd','agu_w1','agu_w2','agu_w3','agu_w4','agu','agu_mtd','jul_1_14_ref','jul_1_21_ref','sep_w1','sep_w2','sep_w3','sep_w4','sep','oct_w1','oct_w2','sep_mtd','agu_1_14_ref','agu_1_21_ref'].forEach(p=>{
+  ['mei','jun','jul_w1','jul_w2','jul_w3','jul_w4','jul','jul_mtd','agu_w1','agu_w2','agu_w3','agu_w4','agu','agu_mtd','jul_1_14_ref','jul_1_21_ref','sep_w1','sep_w2','sep_w3','sep_w4','sep','oct_w1','oct_w2','sep_mtd','agu_1_14_ref','agu_1_21_ref','oct_mtd','sep_1_14_ref'].forEach(p=>{
     const days=D[p].overview.days;
     D[p].top=D[p].top.map(arr=>rowToObj(arr,days));
   });
@@ -495,6 +495,7 @@ function hydrate(){
   D.comparison_week_sepw3_sepw4=D.comparison_week_sepw3_sepw4.map(cmpToObj);
   D.comparison_week_sepw1_octw1=D.comparison_week_sepw1_octw1.map(cmpToObj);
   D.comparison_week_octw1_octw2=D.comparison_week_octw1_octw2.map(cmpToObj);
+  D.comparison_mtd_oct=D.comparison_mtd_oct.map(cmpToObj);
   D.comparison_mtd_sep=D.comparison_mtd_sep.map(cmpToObj);
   D.comparison_mtd_sep2=D.comparison_mtd_sep2.map(cmpToObj);
   D.comparison_mtd_sep3=D.comparison_mtd_sep3.map(cmpToObj);
