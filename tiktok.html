@@ -412,19 +412,23 @@ th.sortable:hover{color:var(--gray800)}
   <div class="page content" id="page-watchlist">
     <div class="insight-box">
       <div class="ib-title">⭐ Watchlist — Rekomendasi Berbasis Performa</div>
-      <div style="font-size:12px;color:rgba(255,255,255,.75);line-height:1.6">
-        4 daftar otomatis. <strong>Growers & Decliners</strong> sekarang pakai basis <strong>September W1 (1–7 Sep) → Oktober W1 (1–7 Okt)</strong>: tanggal sama, sama-sama 7 hari, jadi adil. Pembanding minggu sebelumnya (Sep W4) tidak dipakai karena 9 hari. <strong>Video & LIVE Productivity</strong> tetap pakai Agustus Full Month (1–31 Agu).
+      <div style="font-size:12px;color:rgba(255,255,255,.75);line-height:1.6" id="wl-insight-text">
+        4 daftar otomatis. <strong>Video & LIVE Productivity</strong> tetap pakai Agustus Full Month (1–31 Agu).
       </div>
     </div>
-    <div class="panel" style="margin-bottom:16px">
-      <div class="panel-title" style="display:flex;justify-content:space-between;align-items:center">🚀 Top Growers <span class="ptag">Sep W1 → Okt W1, retained creators</span><button class="btn" style="padding:4px 10px;font-size:11px" onclick="exportWatchlist('growers')">⬇️ Export</button></div>
-      <div style="font-size:11px;color:var(--gray500);margin-bottom:10px">Creator aktif di Sep W1 dan Okt W1 dengan kenaikan GMV absolut terbesar. Keduanya 7 hari, tanggal sama (1–7), jadi adil.</div>
-      <table class="dt"><thead><tr><th>Creator</th><th class="r">GMV Sep W1</th><th class="r">GMV Okt W1</th><th class="r">Growth</th><th class="r">Followers</th></tr></thead><tbody id="wl-growers"></tbody></table>
+    <div style="display:flex;gap:8px;margin-bottom:14px">
+      <button class="btn wl-mode-btn active" data-mode="week" style="padding:6px 14px;font-size:12px" onclick="wlSetMode('week')">📅 Mingguan</button>
+      <button class="btn wl-mode-btn" data-mode="mtd" style="padding:6px 14px;font-size:12px" onclick="wlSetMode('mtd')">📆 MTD</button>
     </div>
     <div class="panel" style="margin-bottom:16px">
-      <div class="panel-title" style="display:flex;justify-content:space-between;align-items:center">📉 Sharpest Decliners <span class="ptag">Sep W1 → Okt W1, retained creators</span><button class="btn" style="padding:4px 10px;font-size:11px" onclick="exportWatchlist('decliners')">⬇️ Export</button></div>
-      <div style="font-size:11px;color:var(--gray500);margin-bottom:10px">Creator aktif di Sep W1 dan Okt W1 dengan penurunan GMV absolut terbesar.</div>
-      <table class="dt"><thead><tr><th>Creator</th><th class="r">GMV Sep W1</th><th class="r">GMV Okt W1</th><th class="r">Decline</th><th class="r">Refund Okt W1</th></tr></thead><tbody id="wl-decliners"></tbody></table>
+      <div class="panel-title" style="display:flex;justify-content:space-between;align-items:center">🚀 Top Growers <span class="ptag" id="wl-growers-tag"></span><button class="btn" style="padding:4px 10px;font-size:11px" onclick="exportWatchlist('growers')">⬇️ Export</button></div>
+      <div style="font-size:11px;color:var(--gray500);margin-bottom:10px" id="wl-growers-desc"></div>
+      <table class="dt"><thead><tr><th>Creator</th><th class="r" id="wl-g-col-a"></th><th class="r" id="wl-g-col-b"></th><th class="r">Growth</th><th class="r">Followers</th></tr></thead><tbody id="wl-growers"></tbody></table>
+    </div>
+    <div class="panel" style="margin-bottom:16px">
+      <div class="panel-title" style="display:flex;justify-content:space-between;align-items:center">📉 Sharpest Decliners <span class="ptag" id="wl-decliners-tag"></span><button class="btn" style="padding:4px 10px;font-size:11px" onclick="exportWatchlist('decliners')">⬇️ Export</button></div>
+      <div style="font-size:11px;color:var(--gray500);margin-bottom:10px" id="wl-decliners-desc"></div>
+      <table class="dt"><thead><tr><th>Creator</th><th class="r" id="wl-d-col-a"></th><th class="r" id="wl-d-col-b"></th><th class="r">Decline</th><th class="r" id="wl-d-col-refund"></th></tr></thead><tbody id="wl-decliners"></tbody></table>
     </div>
     <div class="panel" style="margin-bottom:16px">
       <div class="panel-title" style="display:flex;justify-content:space-between;align-items:center">🎥 Top Video Productivity <span class="ptag">Agustus Full Month (1–31 Agu) · min. 4 video</span><button class="btn" style="padding:4px 10px;font-size:11px" onclick="exportWatchlist('video')">⬇️ Export</button></div>
@@ -865,7 +869,7 @@ function exportComparison(){
 }
 
 function exportWatchlist(section){
-  const W = D.watchlist;
+  const W = (section==='growers'||section==='decliners') ? (wlMode==='mtd'?D.watchlist_mtd:D.watchlist) : D.watchlist;
   let headers, rows, filename;
   if(section==='growers' || section==='decliners'){
     const list = W[section==='growers'?'top_growers':'top_decliners'];
@@ -914,9 +918,27 @@ function renderTier(){
   document.getElementById('tier-bars2').innerHTML=ts.map(t=>`<div class="bar-row"><div class="bar-meta"><span class="bar-lbl">${t} ${TL[t]} · ${T[t].count} creator</span><span class="bar-val">${T[t].gmv_pct}%</span></div><div class="bar-track"><div class="bar-fill" style="width:${T[t].gmv/mx*100}%;background:${TC[t]}"></div></div></div>`).join('');
 }
 
+let wlMode='week';
+function wlSetMode(m){
+  wlMode=m;
+  document.querySelectorAll('.wl-mode-btn').forEach(b=>b.classList.toggle('active',b.dataset.mode===m));
+  renderWatchlist();
+}
 function renderWatchlist(){
-  const wl=D.watchlist;
-  document.getElementById('wl-live-count').textContent=wl.live_productivity_count;
+  const wl = wlMode==='mtd' ? D.watchlist_mtd : D.watchlist;
+  const cfg = wlMode==='mtd' ? D.modes.mtd.periods[0] : D.modes.week.periods[0];
+  const labelA = cfg.prevLabel, labelB = cfg.label;
+  document.getElementById('wl-insight-text').innerHTML = `4 daftar otomatis. <strong>Growers & Decliners</strong> pakai basis <strong>${labelA} → ${labelB}</strong>. <strong>Video & LIVE Productivity</strong> tetap pakai Agustus Full Month (1–31 Agu).`;
+  document.getElementById('wl-growers-tag').textContent = `${labelA} → ${labelB}, retained creators`;
+  document.getElementById('wl-decliners-tag').textContent = `${labelA} → ${labelB}, retained creators`;
+  document.getElementById('wl-growers-desc').textContent = `Creator aktif di kedua periode dengan kenaikan GMV absolut terbesar.`;
+  document.getElementById('wl-decliners-desc').textContent = `Creator aktif di kedua periode dengan penurunan GMV absolut terbesar.`;
+  document.getElementById('wl-g-col-a').textContent = `GMV ${labelA}`;
+  document.getElementById('wl-g-col-b').textContent = `GMV ${labelB}`;
+  document.getElementById('wl-d-col-a').textContent = `GMV ${labelA}`;
+  document.getElementById('wl-d-col-b').textContent = `GMV ${labelB}`;
+  document.getElementById('wl-d-col-refund').textContent = `Refund ${labelB}`;
+  document.getElementById('wl-live-count').textContent=D.watchlist.live_productivity_count;
   document.getElementById('wl-growers').innerHTML=wl.top_growers.map(c=>`<tr>
     <td><div class="cc"><div class="av" style="background:${TB[c.tier_b]||TB['T0']};color:${TC[c.tier_b]||TC['T0']}">${ini(c.display)}</div><div class="cc-name">${c.display}</div></div></td>
     <td class="r">${R(c.gmv_a)}</td><td class="r"><strong>${R(c.gmv_b)}</strong></td>
