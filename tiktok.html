@@ -594,7 +594,8 @@ function renderHero(){
     <div class="hero-kpi"><div class="hk-label">Total Orders</div><div class="hk-val">${N(o.total_orders)}</div><div class="hk-sub">transaksi</div>
       ${bench.available?hDelta(o.total_orders,bench.overview.total_orders):''}</div>
     <div class="hero-sep"></div>
-    <div class="hero-kpi"><div class="hk-label">Avg AOV</div><div class="hk-val">${R(o.avg_aov)}</div><div class="hk-sub">per transaksi</div></div>
+    <div class="hero-kpi"><div class="hk-label">Avg AOV</div><div class="hk-val">${R(o.avg_aov)}</div><div class="hk-sub">per transaksi</div>
+      ${bench.available?hDelta(o.avg_aov,bench.overview.avg_aov):''}</div>
     <div class="hero-sep"></div>
     <div class="hero-kpi"><div class="hk-label">Active Creators</div><div class="hk-val">${N(o.active_creators)}</div><div class="hk-sub">creator dengan GMV>0</div>
       ${bench.available?hDelta(o.active_creators,bench.overview.active_creators):''}</div>

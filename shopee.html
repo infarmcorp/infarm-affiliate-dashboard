@@ -403,7 +403,7 @@ function renderShopeeOverview(){
     <div class="hero-sep"></div>
     <div class="hero-kpi"><div class="hk-label">Total Orders</div><div class="hk-val">${N(ov.total_orders)}</div><div class="hk-sub">transaksi</div>${bench?shDelta(ov.total_orders,bench.total_orders):''}</div>
     <div class="hero-sep"></div>
-    <div class="hero-kpi"><div class="hk-label">Avg AOV</div><div class="hk-val">${R(ov.aov)}</div><div class="hk-sub">per transaksi</div></div>
+    <div class="hero-kpi"><div class="hk-label">Avg AOV</div><div class="hk-val">${R(ov.aov)}</div><div class="hk-sub">per transaksi</div>${bench?shDelta(ov.aov,bench.aov):''}</div>
     <div class="hero-sep"></div>
     <div class="hero-kpi"><div class="hk-label">Active Creators</div><div class="hk-val">${N(ov.active_creators)}</div><div class="hk-sub">creator dengan GMV>0</div>${bench?shDelta(ov.active_creators,bench.active_creators):''}</div>
     <div class="hero-sep"></div>
