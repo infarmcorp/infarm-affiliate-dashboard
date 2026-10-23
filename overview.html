@@ -387,6 +387,10 @@ function renderCombined(){
     deltaHtml.gmv = mkDelta(combinedGmv, prevGmv);
     deltaHtml.orders = mkDelta(combinedOrders, prevOrders);
     deltaHtml.comm = mkDelta(combinedComm, prevComm);
+    deltaHtml.ttCreators = mkDelta(ttOv.active_creators, prevTtOv.active_creators);
+    deltaHtml.shCreators = mkDelta(shOv.active_creators, prevShOv.active_creators);
+    const prevCombinedAov = prevOrders ? Math.round(prevGmv/prevOrders) : 0;
+    deltaHtml.aov = mkDelta(combinedGmv/combinedOrders, prevCombinedAov);
   }
 
   document.getElementById('combined-period-label').textContent = cpLabel + ' · Major metrics saja, bukan detail';
@@ -395,6 +399,7 @@ function renderCombined(){
     <div class="ch-hero"><div class="ch-hero-label">GMV Gabungan</div><div class="ch-hero-val">${R(combinedGmv)}</div>${deltaHtml.gmv}<div class="ch-hero-sub">TikTok + Shopee, additive${benchLabel?' · vs '+benchLabel:''}</div></div>
     <div class="ch-hero"><div class="ch-hero-label">Orders Gabungan</div><div class="ch-hero-val">${N(combinedOrders)}</div>${deltaHtml.orders}<div class="ch-hero-sub">TikTok + Shopee, additive</div></div>
     <div class="ch-hero"><div class="ch-hero-label">Commission Gabungan</div><div class="ch-hero-val">${R(combinedComm)}</div>${deltaHtml.comm}<div class="ch-hero-sub">TikTok + Shopee, additive</div></div>
+    <div class="ch-hero"><div class="ch-hero-label">AOV Gabungan</div><div class="ch-hero-val">${R(Math.round(combinedGmv/combinedOrders))}</div>${deltaHtml.aov||''}<div class="ch-hero-sub">GMV Gabungan ÷ Orders Gabungan</div></div>
   `;
 
   document.getElementById('combined-split').innerHTML = `
@@ -410,10 +415,12 @@ function renderCombined(){
       <div style="background:var(--gray50);border-radius:8px;padding:14px;text-align:center">
         <div style="font-size:24px;font-weight:800">${ttOv.active_creators}</div>
         <div style="font-size:11px;color:var(--gray500)">TikTok creators</div>
+        <div style="margin-top:4px">${deltaHtml.ttCreators||''}</div>
       </div>
       <div style="background:var(--gray50);border-radius:8px;padding:14px;text-align:center">
         <div style="font-size:24px;font-weight:800">${shOv.active_creators}</div>
         <div style="font-size:11px;color:var(--gray500)">Shopee creators</div>
+        <div style="margin-top:4px">${deltaHtml.shCreators||''}</div>
       </div>
     </div>
     <div style="font-size:11px;color:var(--gray500);margin-top:10px;line-height:1.6">

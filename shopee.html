@@ -413,7 +413,7 @@ function renderShopeeOverview(){
 
   document.getElementById('sh-flags').innerHTML = `
     <div class="mc amber"><div class="mc-label">Others (Traffic Tak Teridentifikasi)</div><div class="mc-val">${ov.others_pct}%</div><div class="mc-sub">dari total GMV — min. teridentifikasi, bukan pasti bersih</div>${bench?shDelta(ov.others_pct,bench.others_pct,true):''}</div>
-    <div class="mc red"><div class="mc-label">⚠️ Akun Jaringan Terdeteksi</div><div class="mc-val">${P.network_count}</div><div class="mc-sub">Shopee Media Network, ShopBack, dll — disajikan apa adanya</div></div>
+    <div class="mc red"><div class="mc-label">⚠️ Akun Jaringan Terdeteksi</div><div class="mc-val">${P.network_count}</div><div class="mc-sub">Shopee Media Network, ShopBack, dll — disajikan apa adanya</div>${(bench&&cfg.prevKey)?shDelta(P.network_count,SHD.periods[cfg.prevKey].network_count,true):''}</div>
     <div class="mc blue"><div class="mc-label">Channel Terdeteksi</div><div class="mc-val">7</div><div class="mc-sub">FB, IG, Shopee Video/Live, TikTok, YT, Twitter</div></div>
     <div class="mc"><div class="mc-label">Active Creators</div><div class="mc-val">${N(ov.active_creators)}</div><div class="mc-sub">total creator GMV>0 minggu ini</div></div>
   `;
