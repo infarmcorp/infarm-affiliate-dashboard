@@ -391,11 +391,12 @@ function renderShopeeOverview(){
   document.getElementById('shTbMeta').textContent = cfg.hasComparison ? `Benchmark: ${cfg.prevLabel}${cfg.sameMonth?' 📅 periode sama bulan lalu':' ⏮️ minggu sebelumnya'}` : 'Periode pertama dalam data — belum ada pembanding';
 
   const bench = cfg.hasComparison ? SHD.periods[cfg.prevKey].overview : null;
-  function shDelta(cur,prev){
+  function shDelta(cur,prev,invert){
     if(!bench) return '';
     const d = prev ? Math.round((cur-prev)/prev*100) : 0;
     if(d===0) return '';
-    return `<span class="hk-delta ${d>0?'hd-up':'hd-down'}">${d>0?'▲':'▼'} ${Math.abs(d)}%</span>`;
+    const good = invert ? d<0 : d>0;
+    return `<span class="hk-delta ${good?'hd-up':'hd-down'}">${d>0?'▲':'▼'} ${Math.abs(d)}%</span>`;
   }
 
   document.getElementById('sh-hero').innerHTML = `
@@ -411,7 +412,7 @@ function renderShopeeOverview(){
   `;
 
   document.getElementById('sh-flags').innerHTML = `
-    <div class="mc amber"><div class="mc-label">Others (Traffic Tak Teridentifikasi)</div><div class="mc-val">${ov.others_pct}%</div><div class="mc-sub">dari total GMV — min. teridentifikasi, bukan pasti bersih</div></div>
+    <div class="mc amber"><div class="mc-label">Others (Traffic Tak Teridentifikasi)</div><div class="mc-val">${ov.others_pct}%</div><div class="mc-sub">dari total GMV — min. teridentifikasi, bukan pasti bersih</div>${bench?shDelta(ov.others_pct,bench.others_pct,true):''}</div>
     <div class="mc red"><div class="mc-label">⚠️ Akun Jaringan Terdeteksi</div><div class="mc-val">${P.network_count}</div><div class="mc-sub">Shopee Media Network, ShopBack, dll — disajikan apa adanya</div></div>
     <div class="mc blue"><div class="mc-label">Channel Terdeteksi</div><div class="mc-val">7</div><div class="mc-sub">FB, IG, Shopee Video/Live, TikTok, YT, Twitter</div></div>
     <div class="mc"><div class="mc-label">Active Creators</div><div class="mc-val">${N(ov.active_creators)}</div><div class="mc-sub">total creator GMV>0 minggu ini</div></div>

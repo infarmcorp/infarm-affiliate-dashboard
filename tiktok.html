@@ -611,12 +611,19 @@ function hDelta(cur,bench){
 
 function renderSecKPIs(){
   const o=periodData(P).overview;
+  const bench=getBenchmark();
+  const dHtml=(cur,prv,invert)=>{
+    if(!bench.available) return '';
+    const d=pct(cur,prv); if(d===0) return '';
+    const good = invert ? d<0 : d>=0;
+    return `<span class="mc-delta ${good?'mcd-up':'mcd-down'}">${d>=0?'↑':'↓'} ${Math.abs(d)}%</span>`;
+  };
   document.getElementById('sec-kpis').innerHTML=[
-    {label:'Avg CTR',val:o.avg_ctr+'%',sub:'rata-rata click-through',cls:''},
-    {label:'Refund Rate',val:o.refund_rate+'%',sub:'GMV refunded',cls:o.refund_rate>15?'red':o.refund_rate>10?'amber':''},
-    {label:'Total Videos',val:N(o.total_videos),sub:'shoppable videos aktif',cls:'blue'},
-    {label:'Total LIVE',val:N(o.total_lives),sub:'sesi live streaming',cls:'purple'},
-  ].map(c=>`<div class="mc ${c.cls}"><div class="mc-label">${c.label}</div><div class="mc-val">${c.val}</div><div class="mc-sub">${c.sub}</div></div>`).join('');
+    {label:'Avg CTR',val:o.avg_ctr+'%',sub:'rata-rata click-through',cls:'',delta:dHtml(o.avg_ctr,bench.available?bench.overview.avg_ctr:0,false)},
+    {label:'Refund Rate',val:o.refund_rate+'%',sub:'GMV refunded',cls:o.refund_rate>15?'red':o.refund_rate>10?'amber':'',delta:dHtml(o.refund_rate,bench.available?bench.overview.refund_rate:0,true)},
+    {label:'Total Videos',val:N(o.total_videos),sub:'shoppable videos aktif',cls:'blue',delta:dHtml(o.total_videos,bench.available?bench.overview.total_videos:0,false)},
+    {label:'Total LIVE',val:N(o.total_lives),sub:'sesi live streaming',cls:'purple',delta:dHtml(o.total_lives,bench.available?bench.overview.total_lives:0,false)},
+  ].map(c=>`<div class="mc ${c.cls}"><div class="mc-label">${c.label}</div><div class="mc-val">${c.val}</div><div class="mc-sub">${c.sub}</div>${c.delta}</div>`).join('');
 }
 
 function renderTop(){
