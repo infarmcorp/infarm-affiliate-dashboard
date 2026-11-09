@@ -287,6 +287,7 @@ function ini(s){const w=(s||'X').replace(/[^a-z]/gi,' ').trim().split(' ');retur
 // Only periods present in BOTH D (TikTok) and SHD.periods (Shopee) are eligible here.
 const COMBINED_MODES = {
   week: [
+    {key:'nov_w1', label:'November W1 (1–7 Nov)'},
     {key:'oct_w4', label:'Oktober W4 (22–31 Okt)'},
     {key:'oct_w3', label:'Oktober W3 (15–21 Okt)'},
     {key:'oct_w2', label:'Oktober W2 (8–14 Okt)'},
@@ -312,6 +313,7 @@ const COMBINED_MODES = {
     {key:'jun', label:'Juni 2026'},
   ],
   mtd: [
+    {key:'nov_mtd', label:'November MTD (1–7 Nov)'},
     {key:'oct_mtd', label:'Oktober MTD (1–31 Okt, bulan selesai)'},
     {key:'sep_mtd', label:'September MTD (1–21 Sep)'},
   ],
