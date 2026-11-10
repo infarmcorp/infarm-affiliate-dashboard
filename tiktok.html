@@ -238,6 +238,7 @@ th.sortable:hover{color:var(--gray800)}
 .sh-network-flag{color:#b45309;font-size:9px;font-weight:700}
 
 </style>
+<link rel="stylesheet" href="insight.css">
 </head>
 <body>
 <div class="platform-switcher">
@@ -256,6 +257,8 @@ th.sortable:hover{color:var(--gray800)}
     <button class="nav-btn" onclick="showPage('comparison')"><span class="nav-ic">📈</span>Comparison</button>
     <button class="nav-btn" onclick="showPage('tier')"><span class="nav-ic">🏆</span>Tiering</button>
     <button class="nav-btn" onclick="showPage('watchlist')"><span class="nav-ic">⭐</span>Watchlist</button>
+    <button class="nav-btn" onclick="showPage('trend')"><span class="nav-ic">📉</span>Tren Jangka Panjang</button>
+    <button class="nav-btn" onclick="showPage('retensi')"><span class="nav-ic">🔁</span>Retensi</button>
     <div class="sb-grp">Alert</div>
     <button class="nav-btn" onclick="showPage('alerts')"><span class="nav-ic">🚨</span>Red Flags <span style="margin-left:auto;background:var(--red);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:999px" id="alert-count">5</span></button>
   </nav>
@@ -442,6 +445,9 @@ th.sortable:hover{color:var(--gray800)}
     </div>
   </div>
 
+  <div class="page content" id="page-trend"></div>
+  <div class="page content" id="page-retensi"></div>
+
   <div class="page content" id="page-alerts">
     <div class="sec"><div class="sec-hdr"><div class="sec-title" id="alerts-page-title">🚨 Red Flags</div></div><div id="alert-list"></div></div>
     <div class="sec" style="margin-top:24px"><div class="sec-hdr"><div class="sec-title">✅ Green Signals</div></div><div id="green-list"></div></div>
@@ -570,7 +576,7 @@ function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
-  const icons={overview:'📊',weekly:'📅',creators:'👤',comparison:'📈',tier:'🏆',watchlist:'⭐',alerts:'🚨'};
+  const icons={overview:'📊',weekly:'📅',creators:'👤',comparison:'📈',tier:'🏆',watchlist:'⭐',alerts:'🚨',trend:'📉',retensi:'🔁'};
   document.querySelectorAll('.nav-btn').forEach(b=>{if(b.textContent.trim().startsWith(icons[id]))b.classList.add('active')});
   renderAll();
 }
@@ -1047,5 +1053,6 @@ function renderAlerts(){
 // ===== INIT =====
 loadDataAndInit();
 </script>
+<script src="insight.js"></script>
 </body>
 </html>
