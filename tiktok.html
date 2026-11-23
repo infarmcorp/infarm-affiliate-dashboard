@@ -511,6 +511,18 @@ function hydrate(){
   D.comparison_week_octw1_novw1=D.comparison_week_octw1_novw1.map(cmpToObj);
   D.comparison_week_novw1_novw2=D.comparison_week_novw1_novw2.map(cmpToObj);
   D.comparison_mtd_nov=D.comparison_mtd_nov.map(cmpToObj);
+  D.comparison_week_octw2_novw2=D.comparison_week_octw2_novw2.map(cmpToObj);
+  D.comparison_week_sepw4_octw4=D.comparison_week_sepw4_octw4.map(cmpToObj);
+  D.comparison_week_sepw3_octw3=D.comparison_week_sepw3_octw3.map(cmpToObj);
+  D.comparison_week_sepw2_octw2=D.comparison_week_sepw2_octw2.map(cmpToObj);
+  D.comparison_week_aguw4_sepw4=D.comparison_week_aguw4_sepw4.map(cmpToObj);
+  D.comparison_week_aguw3_sepw3=D.comparison_week_aguw3_sepw3.map(cmpToObj);
+  D.comparison_week_aguw2_sepw2=D.comparison_week_aguw2_sepw2.map(cmpToObj);
+  D.comparison_week_aguw1_sepw1=D.comparison_week_aguw1_sepw1.map(cmpToObj);
+  D.comparison_week_julw4_aguw4=D.comparison_week_julw4_aguw4.map(cmpToObj);
+  D.comparison_week_julw3_aguw3=D.comparison_week_julw3_aguw3.map(cmpToObj);
+  D.comparison_week_julw2_aguw2=D.comparison_week_julw2_aguw2.map(cmpToObj);
+  D.comparison_week_julw1_aguw1=D.comparison_week_julw1_aguw1.map(cmpToObj);
   D.comparison_mtd_sep=D.comparison_mtd_sep.map(cmpToObj);
   D.comparison_mtd_sep2=D.comparison_mtd_sep2.map(cmpToObj);
   D.comparison_mtd_sep3=D.comparison_mtd_sep3.map(cmpToObj);
@@ -751,7 +763,7 @@ function renderWeekly(){
     `;
     let noteText='';
     if(bench.estimate) noteText='⚠️ Benchmark ini estimasi prorata dari data bulan sebelumnya (bukan actual same-period), karena data harian bulan lalu tidak tersedia dalam pecahan mingguan.';
-    else if(bench.sameMonth) noteText='✅ Ini perbandingan periode yang sama di bulan sebelumnya (apple-to-apple), bukan minggu berurutan — lebih akurat karena durasi hari biasanya matching.';
+    else if(bench.sameMonth) noteText='✅ Ini perbandingan minggu yang sama di bulan sebelumnya (W1 dengan W1, W2 dengan W2, dst.), bukan minggu berurutan.'+(bench.overview.days!==o.days?' ⚠️ Jumlah hari beda ('+bench.overview.days+' vs '+o.days+' hari): bandingkan GMV per hari, bukan total.':' Jumlah hari sama.');
     else noteText='⏮️ Ini perbandingan ke minggu sebelumnya (bukan periode sama bulan lalu) — durasi hari bisa beda, baca delta-nya dengan hati-hati.';
     document.getElementById('estimate-note').textContent=noteText;
     const mx=Math.max(o.total_gmv,bench.overview.total_gmv)*1.15;
